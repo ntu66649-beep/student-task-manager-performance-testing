@@ -1,0 +1,353 @@
+{
+  "metrics": {
+    "http_req_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 9.09649,
+        "avg": 2.7690549334811467,
+        "min": 0,
+        "med": 1.51215,
+        "max": 42.3191,
+        "p(90)": 6.253650000000007
+      },
+      "thresholds": {
+        "p(90)<250": {
+          "ok": true
+        },
+        "p(95)<400": {
+          "ok": true
+        }
+      }
+    },
+    "http_req_connecting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "min": 0,
+        "med": 0,
+        "max": 2.9589,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.004011141906873615
+      }
+    },
+    "http_req_duration{expected_response:true}": {
+      "contains": "time",
+      "values": {
+        "med": 1.51215,
+        "max": 42.3191,
+        "p(90)": 6.253650000000007,
+        "p(95)": 9.09649,
+        "avg": 2.7690549334811467,
+        "min": 0
+      },
+      "type": "trend"
+    },
+    "vus": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "value": 1,
+        "min": 1,
+        "max": 9
+      }
+    },
+    "data_sent": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 890883,
+        "rate": 35323.625739420386
+      }
+    },
+    "http_req_sending": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.02490579268292683,
+        "min": 0,
+        "med": 0,
+        "max": 2.0233
+      }
+    },
+    "iteration_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 325.1589195121953,
+        "min": 308.223,
+        "med": 322.0171,
+        "max": 405.7123,
+        "p(90)": 340.3553,
+        "p(95)": 347.4851
+      }
+    },
+    "vus_max": {
+      "contains": "default",
+      "values": {
+        "value": 10,
+        "min": 10,
+        "max": 10
+      },
+      "type": "gauge"
+    },
+    "checks": {
+      "contains": "default",
+      "values": {
+        "rate": 1,
+        "passes": 4510,
+        "fails": 0
+      },
+      "type": "rate"
+    },
+    "http_req_tls_handshaking": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "min": 0,
+        "med": 0,
+        "max": 0,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0
+      }
+    },
+    "http_req_blocked": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 12.1106,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.015465687361419067,
+        "min": 0
+      }
+    },
+    "group_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 4.007897782705099,
+        "min": 0,
+        "med": 1.525,
+        "max": 52.7713,
+        "p(90)": 10.7571,
+        "p(95)": 17.425725
+      }
+    },
+    "data_received": {
+      "contains": "data",
+      "values": {
+        "rate": 8405580.057793235,
+        "count": 211993764
+      },
+      "type": "counter"
+    },
+    "http_reqs": {
+      "contains": "default",
+      "values": {
+        "count": 3608,
+        "rate": 143.0576648873407
+      },
+      "thresholds": {
+        "rate>10": {
+          "ok": true
+        }
+      },
+      "type": "counter"
+    },
+    "http_req_receiving": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(90)": 0.896160000000001,
+        "p(95)": 1.1096649999999992,
+        "avg": 0.4544586751662973,
+        "min": 0,
+        "med": 0,
+        "max": 26.0998
+      }
+    },
+    "iterations": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 451,
+        "rate": 17.88220811091759
+      }
+    },
+    "http_req_failed": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0,
+        "passes": 0,
+        "fails": 3608
+      },
+      "thresholds": {
+        "rate<0.01": {
+          "ok": true
+        }
+      }
+    },
+    "http_req_waiting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 2.2896904656319284,
+        "min": 0,
+        "med": 1.2521499999999999,
+        "max": 42.3191,
+        "p(90)": 5.454770000000003,
+        "p(95)": 7.432135
+      }
+    }
+  },
+  "root_group": {
+    "path": "",
+    "id": "d41d8cd98f00b204e9800998ecf8427e",
+    "groups": [
+      {
+        "id": "fccdfeda501e7a6755085498fa67aaa0",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Status 200",
+              "path": "::01. Health & Ping::Status 200",
+              "id": "1f412e3ca402ff9d69c8908c54975c21",
+              "passes": 451,
+              "fails": 0
+            }
+          ],
+        "name": "01. Health & Ping",
+        "path": "::01. Health & Ping"
+      },
+      {
+        "name": "02. Authentication",
+        "path": "::02. Authentication",
+        "id": "74156f92e8ff30c7537d5a1d870b2811",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Status 200",
+              "path": "::02. Authentication::Status 200",
+              "id": "8e4505c89b44dbb6eb7a76cb04ba691b",
+              "passes": 451,
+              "fails": 0
+            },
+            {
+              "name": "Valid Token",
+              "path": "::02. Authentication::Valid Token",
+              "id": "3fac4601cef284878e36c613817d0954",
+              "passes": 451,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "path": "::03. Read Operations (GET)",
+        "id": "89697c28b9e4120dbfd194f2265c0cec",
+        "groups": [],
+        "checks": [
+            {
+              "name": "GET Tasks Status 200",
+              "path": "::03. Read Operations (GET)::GET Tasks Status 200",
+              "id": "a7456608f7abad65eeb23be48cdc9367",
+              "passes": 451,
+              "fails": 0
+            },
+            {
+              "name": "GET Filter Status 200",
+              "path": "::03. Read Operations (GET)::GET Filter Status 200",
+              "id": "1a9d03a1a6261bc326220bec268669a0",
+              "passes": 451,
+              "fails": 0
+            },
+            {
+              "fails": 0,
+              "name": "GET Detail Status 200",
+              "path": "::03. Read Operations (GET)::GET Detail Status 200",
+              "id": "b01cf12173186942db2bc60ed29444d0",
+              "passes": 451
+            }
+          ],
+        "name": "03. Read Operations (GET)"
+      },
+      {
+        "path": "::04. Create Operation (POST)",
+        "id": "92dec3b0fc2a05dd6de21d799094473c",
+        "groups": [],
+        "checks": [
+            {
+              "name": "POST Task Status 201",
+              "path": "::04. Create Operation (POST)::POST Task Status 201",
+              "id": "7e6fd74eaa29af202d1b51601ba9ed9b",
+              "passes": 451,
+              "fails": 0
+            },
+            {
+              "name": "Captured Task ID",
+              "path": "::04. Create Operation (POST)::Captured Task ID",
+              "id": "77fd700bf1fa003144a9b7cb101ecde6",
+              "passes": 451,
+              "fails": 0
+            }
+          ],
+        "name": "04. Create Operation (POST)"
+      },
+      {
+        "groups": [],
+        "checks": [
+            {
+              "name": "PUT Task Status 200",
+              "path": "::05. Update Operation (PUT)::PUT Task Status 200",
+              "id": "ed560353fb7cac0d225a7d78ecdb6476",
+              "passes": 451,
+              "fails": 0
+            }
+          ],
+        "name": "05. Update Operation (PUT)",
+        "path": "::05. Update Operation (PUT)",
+        "id": "47ab7518516422b8342f270d8ce2d730"
+      },
+      {
+        "name": "06. Delete Operation (DELETE)",
+        "path": "::06. Delete Operation (DELETE)",
+        "id": "4ec4db6c60da2e011094644e5f42d185",
+        "groups": [],
+        "checks": [
+            {
+              "name": "DELETE Task Status 200",
+              "path": "::06. Delete Operation (DELETE)::DELETE Task Status 200",
+              "id": "b9b519c421a815cff8af625ecbb65ebd",
+              "passes": 451,
+              "fails": 0
+            }
+          ]
+      }
+    ],
+    "checks": [],
+    "name": ""
+  },
+  "options": {
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": "",
+    "noColor": false
+  },
+  "state": {
+    "isStdOutTTY": false,
+    "isStdErrTTY": false,
+    "testRunDurationMs": 25220.599
+  }
+}

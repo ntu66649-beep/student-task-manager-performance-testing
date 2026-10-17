@@ -1,0 +1,382 @@
+{
+  "options": {
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": "",
+    "noColor": false
+  },
+  "state": {
+    "isStdOutTTY": false,
+    "isStdErrTTY": false,
+    "testRunDurationMs": 41463.6759
+  },
+  "metrics": {
+    "http_req_tls_handshaking": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "min": 0,
+        "med": 0,
+        "max": 0,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0
+      }
+    },
+    "group_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 2.8575876766091066,
+        "min": 0,
+        "med": 1.87235,
+        "max": 30.5622,
+        "p(90)": 5.770160000000001,
+        "p(95)": 7.757549999999999
+      }
+    },
+    "http_req_receiving": {
+      "contains": "time",
+      "values": {
+        "p(95)": 1.01137,
+        "avg": 0.33163869701726856,
+        "min": 0,
+        "med": 0,
+        "max": 17.0466,
+        "p(90)": 0.90467
+      },
+      "type": "trend"
+    },
+    "vus_max": {
+      "values": {
+        "value": 10,
+        "min": 10,
+        "max": 10
+      },
+      "type": "gauge",
+      "contains": "default"
+    },
+    "http_req_duration": {
+      "thresholds": {
+        "p(90)<250": {
+          "ok": true
+        },
+        "p(95)<400": {
+          "ok": true
+        }
+      },
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 1.7306839089481931,
+        "min": 0,
+        "med": 1.5279,
+        "max": 18.7895,
+        "p(90)": 2.69566,
+        "p(95)": 3.316484999999998
+      }
+    },
+    "http_req_sending": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 0,
+        "avg": 0.018964285714285715,
+        "min": 0,
+        "med": 0,
+        "max": 1.5637,
+        "p(90)": 0
+      }
+    },
+    "http_reqs": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "rate": 30.7256887467616,
+        "count": 1274
+      },
+      "thresholds": {
+        "rate>10": {
+          "ok": true
+        }
+      }
+    },
+    "http_req_duration{expected_response:true}": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(90)": 2.69566,
+        "p(95)": 3.316484999999998,
+        "avg": 1.7306839089481931,
+        "min": 0,
+        "med": 1.5279,
+        "max": 18.7895
+      }
+    },
+    "vus": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "value": 1,
+        "min": 1,
+        "max": 10
+      }
+    },
+    "data_sent": {
+      "contains": "data",
+      "values": {
+        "count": 324153,
+        "rate": 7817.758386443495
+      },
+      "type": "counter"
+    },
+    "http_req_connecting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 0.00827032967032967,
+        "min": 0,
+        "med": 0,
+        "max": 2.0635,
+        "p(90)": 0,
+        "p(95)": 0
+      }
+    },
+    "checks": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "passes": 2366,
+        "fails": 0,
+        "rate": 1
+      }
+    },
+    "iterations": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 182,
+        "rate": 4.389384106680228
+      }
+    },
+    "http_req_failed": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0,
+        "passes": 0,
+        "fails": 1274
+      },
+      "thresholds": {
+        "rate<0.01": {
+          "ok": true
+        }
+      }
+    },
+    "http_req_blocked": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.03047739403453689,
+        "min": 0,
+        "med": 0,
+        "max": 23.1794
+      }
+    },
+    "data_received": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 14093147,
+        "rate": 339891.40359839634
+      }
+    },
+    "http_req_waiting": {
+      "contains": "time",
+      "values": {
+        "p(90)": 2.33005,
+        "p(95)": 3.01747,
+        "avg": 1.38008092621664,
+        "min": 0,
+        "med": 1.1242,
+        "max": 8.2644
+      },
+      "type": "trend"
+    },
+    "iteration_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 1723.5788,
+        "max": 1748.2509,
+        "p(90)": 1733.9615000000001,
+        "p(95)": 1739.63453,
+        "avg": 1725.1174813186822,
+        "min": 1715.3218
+      }
+    }
+  },
+  "root_group": {
+    "groups": [
+      {
+        "name": "01. Health Check",
+        "path": "::01. Health Check",
+        "id": "5bc28b3920fb036da200f6a1cfbbd9c4",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Health Check - Status 200",
+              "path": "::01. Health Check::Health Check - Status 200",
+              "id": "a648bcead52ef2fc91a8665db2a8ed25",
+              "passes": 182,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "name": "02. User Authentication",
+        "path": "::02. User Authentication",
+        "id": "80a19492211e1410242a4b11a32e7295",
+        "groups": [],
+        "checks": [
+            {
+              "passes": 182,
+              "fails": 0,
+              "name": "Dang nhap - Status 200",
+              "path": "::02. User Authentication::Dang nhap - Status 200",
+              "id": "35dc7598c2e6512a9489341017c295d9"
+            },
+            {
+              "name": "Dang nhap - Nhan duoc Token",
+              "path": "::02. User Authentication::Dang nhap - Nhan duoc Token",
+              "id": "b3d3ea75730545bebb87f8e66588cf21",
+              "passes": 182,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "path": "::03. Retrieve All Tasks",
+        "id": "525465259f358b084ada31516a6d02ff",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Danh sach task - Status 200",
+              "path": "::03. Retrieve All Tasks::Danh sach task - Status 200",
+              "id": "409218ee826f3c18594bcc0f6d1a32b7",
+              "passes": 182,
+              "fails": 0
+            },
+            {
+              "name": "Danh sach task - Mang du lieu hop le",
+              "path": "::03. Retrieve All Tasks::Danh sach task - Mang du lieu hop le",
+              "id": "2e724a25a6e03712afdeaff42d3e5d66",
+              "passes": 182,
+              "fails": 0
+            }
+          ],
+        "name": "03. Retrieve All Tasks"
+      },
+      {
+        "checks": [
+          {
+            "passes": 182,
+            "fails": 0,
+            "name": "Loc task TODO - Status 200",
+            "path": "::04. Filter Tasks by Status::Loc task TODO - Status 200",
+            "id": "25b7ae2b22fafd4c877877baa2d32808"
+          },
+          {
+            "name": "Loc task TODO - Du lieu phan hoi dung",
+            "path": "::04. Filter Tasks by Status::Loc task TODO - Du lieu phan hoi dung",
+            "id": "8e9380fd7564434d7372695662b24b2f",
+            "passes": 182,
+            "fails": 0
+          }
+        ],
+        "name": "04. Filter Tasks by Status",
+        "path": "::04. Filter Tasks by Status",
+        "id": "d1ae2522774a4bdaaa0ff104e12359e3",
+        "groups": []
+      },
+      {
+        "name": "05. Get Task Details",
+        "path": "::05. Get Task Details",
+        "id": "6302cd4103fbe8914702da4232b86f99",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Chi tiet task - Status 200",
+              "path": "::05. Get Task Details::Chi tiet task - Status 200",
+              "id": "a9762eece302adcba809de831ee81563",
+              "passes": 182,
+              "fails": 0
+            },
+            {
+              "name": "Chi tiet task - ID khop",
+              "path": "::05. Get Task Details::Chi tiet task - ID khop",
+              "id": "3a020715b034b73a245e7524dcb894e3",
+              "passes": 182,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "name": "06. Create Task",
+        "path": "::06. Create Task",
+        "id": "509b7226cf54cfd1dc3ba434cf5357e3",
+        "groups": [],
+        "checks": [
+            {
+              "passes": 182,
+              "fails": 0,
+              "name": "Tao task - Status 201",
+              "path": "::06. Create Task::Tao task - Status 201",
+              "id": "43c80c6a2937bdadde5c23834a76bcd7"
+            },
+            {
+              "name": "Tao task - ID hop le",
+              "path": "::06. Create Task::Tao task - ID hop le",
+              "id": "14502ce42a14e301340d004c3247332f",
+              "passes": 182,
+              "fails": 0
+            }
+          ]
+      },
+      {
+        "name": "07. Update Task",
+        "path": "::07. Update Task",
+        "id": "711a52d2de12c7e3a0ace78ee9c7af83",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Cap nhat task - Status 200",
+              "path": "::07. Update Task::Cap nhat task - Status 200",
+              "id": "33d951234782eac2510845057afe3fa9",
+              "passes": 182,
+              "fails": 0
+            },
+            {
+              "name": "Cap nhat task - Thanh cong",
+              "path": "::07. Update Task::Cap nhat task - Thanh cong",
+              "id": "84f3e0c799c50c32c72d3567578ccb4e",
+              "passes": 182,
+              "fails": 0
+            }
+          ]
+      }
+    ],
+    "checks": [],
+    "name": "",
+    "path": "",
+    "id": "d41d8cd98f00b204e9800998ecf8427e"
+  }
+}

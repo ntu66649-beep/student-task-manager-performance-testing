@@ -1,0 +1,26 @@
+{
+  "name": "student-task-manager-performance-testing",
+  "version": "1.0.0",
+  "description": "Student Task Manager - Performance Testing with k6 for SWT301",
+  "scripts": {
+    "test": "powershell -ExecutionPolicy Bypass -File ./run-all-tests.ps1",
+    "test:smoke": ".\\bin\\k6.exe run scripts/01_smoke_test.js",
+    "test:load": ".\\bin\\k6.exe run scripts/02_load_test.js",
+    "test:stress": ".\\bin\\k6.exe run scripts/03_stress_test.js",
+    "test:full": ".\\bin\\k6.exe run scripts/full_flow_test.js",
+    "report:smoke": "powershell -Command Start-Process reports/smoke-test-report.html",
+    "report:load": "powershell -Command Start-Process reports/load-test-report.html",
+    "report:stress": "powershell -Command Start-Process reports/stress-test-report.html"
+  },
+  "keywords": [
+    "swt301",
+    "performance-testing",
+    "k6",
+    "load-testing",
+    "stress-testing",
+    "smoke-testing",
+    "rest-api"
+  ],
+  "author": "SWT301 Student",
+  "license": "MIT"
+}

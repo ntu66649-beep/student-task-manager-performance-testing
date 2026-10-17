@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bao Cao Kiem Thu Hieu Nang - Full Flow Testing (Kiem thu toan bo chu trinh CRUD)</title>
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-color: #e2e8f0;
+      --color-pass: #166534;
+      --color-pass-bg: #dcfce7;
+      --color-fail: #991b1b;
+      --color-fail-bg: #fee2e2;
+      --primary: #1e293b;
+      --primary-light: #334155;
+      --accent: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .title-group h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .title-group p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .status-pass {
+      color: var(--color-pass);
+      background-color: var(--color-pass-bg);
+      border: 1px solid #bbf7d0;
+    }
+
+    .status-fail {
+      color: var(--color-fail);
+      background-color: var(--color-fail-bg);
+      border: 1px solid #fecaca;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-label {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.2rem;
+    }
+
+    .meta-value {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .card-label {
+      font-size: 0.775rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .card-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .badge-pass {
+      background-color: var(--color-pass-bg);
+      color: var(--color-pass);
+    }
+
+    .badge-fail {
+      background-color: var(--color-fail-bg);
+      color: var(--color-fail);
+    }
+
+    .font-mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-top">
+        <div class="title-group">
+          <h1>Bao Cao Kiem Thu Hieu Nang REST API</h1>
+          <p>Du an: Student Task Manager | Mon hoc: SWT301</p>
+        </div>
+        <div class="status-badge status-pass">
+          KET QUA: PASS
+        </div>
+      </div>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Kich ban kiem thu</span>
+          <span class="meta-value">Full Flow CRUD (10 Nguoi dung ao - 10 VUs)</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Dich vu muc tieu</span>
+          <span class="meta-value font-mono">http://localhost:3000</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Thoi gian thuc hien</span>
+          <span class="meta-value">10/17/2026, 14:09:10</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Danh gia tong quan</span>
+          <span class="meta-value">DAT (TAT CA TIEU CHI DEU DAT NGUONG)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-cards">
+      <div class="card">
+        <div class="card-label">Nguoi dung ao (VUs)</div>
+        <div class="card-value">10</div>
+        <div class="card-sub">So luong VU toi da</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Tong so Request</div>
+        <div class="card-value">3608</div>
+        <div class="card-sub">451 iterations hoan thanh</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Throughput trung binh</div>
+        <div class="card-value">143.1 <span style="font-size: 1rem; font-weight: 500;">req/s</span></div>
+        <div class="card-sub">Tan suat dap ung yeu cau</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Response Time P95</div>
+        <div class="card-value">9.10 ms</div>
+        <div class="card-sub">95% request nhanh hon muc nay</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Ty le loi (Error Rate)</div>
+        <div class="card-value" style="color: var(--color-pass);">0.00%</div>
+        <div class="card-sub">3608 thanh cong / 0 that bai</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">1. Danh gia cac nguong kiem thu (Thresholds SLA)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Chi so (Metric)</th>
+            <th>Dieu kien nguong (Condition)</th>
+            <th>Trang thai</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="font-mono"><strong>http_req_failed</strong></td>
+            <td class="font-mono">rate<0.01</td>
+            <td>
+              <span class="badge badge-pass">
+                PASS (DAT)
+              </span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="font-mono"><strong>http_req_duration</strong></td>
+            <td class="font-mono">p(90)<250</td>
+            <td>
+              <span class="badge badge-pass">
+                PASS (DAT)
+              </span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="font-mono"><strong>http_req_duration</strong></td>
+            <td class="font-mono">p(95)<400</td>
+            <td>
+              <span class="badge badge-pass">
+                PASS (DAT)
+              </span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="font-mono"><strong>http_reqs</strong></td>
+            <td class="font-mono">rate>10</td>
+            <td>
+              <span class="badge badge-pass">
+                PASS (DAT)
+              </span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">2. Thong ke thoi gian phan hoi (Response Time Breakdown)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Chi so</th>
+            <th>Gia tri do luong</th>
+            <th>Y nghia ky thuat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nho nhat (Min)</td>
+            <td class="font-mono"><strong>0 ms</strong></td>
+            <td>Thoi gian phan hoi nhanh nhat ghi nhan duoc</td>
+          </tr>
+          <tr>
+            <td>Trung binh (Average)</td>
+            <td class="font-mono"><strong>2.77 ms</strong></td>
+            <td>Thoi gian phan hoi trung binh cua toan bo request</td>
+          </tr>
+          <tr>
+            <td>Trung vi (Median)</td>
+            <td class="font-mono"><strong>1.51 ms</strong></td>
+            <td>50% tong so request co thoi gian phan hoi duoi muc nay</td>
+          </tr>
+          <tr>
+            <td>Phan vi 90% (P90)</td>
+            <td class="font-mono"><strong>6.25 ms</strong></td>
+            <td>90% tong so request co thoi gian phan hoi duoi muc nay</td>
+          </tr>
+          <tr>
+            <td>Phan vi 95% (P95)</td>
+            <td class="font-mono"><strong>9.10 ms</strong></td>
+            <td>95% tong so request co thoi gian phan hoi duoi muc nay (Tieu chuan SLA)</td>
+          </tr>
+          <tr>
+            <td>Phan vi 99% (P99)</td>
+            <td class="font-mono"><strong>0 ms</strong></td>
+            <td>99% tong so request co thoi gian phan hoi duoi muc nay</td>
+          </tr>
+          <tr>
+            <td>Lon nhat (Max)</td>
+            <td class="font-mono"><strong>42.32 ms</strong></td>
+            <td>Thoi gian phan hoi cham nhat ghi nhan duoc</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">3. Kiem tra tinh dung dan chuc nang (Functional Checks)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Noi dung kiem tra (Check Name)</th>
+            <th>So lan thanh cong</th>
+            <th>So lan that bai</th>
+            <th>Ty le dat (%)</th>
+            <th>Ket qua</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td><strong>Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>Valid Token</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>GET Tasks Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>GET Filter Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>GET Detail Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>POST Task Status 201</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>Captured Task ID</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>PUT Task Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+            <tr>
+              <td><strong>DELETE Task Status 200</strong></td>
+              <td class="font-mono">451</td>
+              <td class="font-mono">0</td>
+              <td class="font-mono">100.0%</td>
+              <td>
+                <span class="badge badge-pass">
+                  DAT
+                </span>
+              </td>
+            </tr>
+            
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">4. Thong ke luu luong mang va chu ky (Network & Iteration)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Hang muc</th>
+            <th>Gia tri tong cong</th>
+            <th>Toc do trung binh</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Du lieu nhan (Data Received)</td>
+            <td class="font-mono">202.17 MB</td>
+            <td class="font-mono">8.02 MB/s</td>
+          </tr>
+          <tr>
+            <td>Du lieu gui (Data Sent)</td>
+            <td class="font-mono">870 KB</td>
+            <td class="font-mono">34.5 KB/s</td>
+          </tr>
+          <tr>
+            <td>So chu ky lap (Iterations)</td>
+            <td class="font-mono">451 chu ky</td>
+            <td class="font-mono">17.88 chu ky/s</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer">
+      <p>Bao cao duoc tao tu dong boi k6 Performance Testing Suite</p>
+      <p>He thong: Student Task Manager REST API - Mon hoc: SWT301</p>
+    </div>
+  </div>
+</body>
+</html>

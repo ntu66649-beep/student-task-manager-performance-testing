@@ -1,0 +1,341 @@
+{
+  "root_group": {
+    "checks": [],
+    "name": "",
+    "path": "",
+    "id": "d41d8cd98f00b204e9800998ecf8427e",
+    "groups": [
+        {
+          "id": "38c7c1e02df52c1fed47a5381913e95e",
+          "groups": [],
+          "checks": [
+              {
+                "passes": 1146,
+                "fails": 0,
+                "name": "Health Check - Phuc dap 200",
+                "path": "::01. Health Check Under Stress::Health Check - Phuc dap 200",
+                "id": "76f31fbe83996eb9ddb000685d4fe6a6"
+              }
+            ],
+          "name": "01. Health Check Under Stress",
+          "path": "::01. Health Check Under Stress"
+        },
+        {
+          "name": "02. Concurrent Authentication",
+          "path": "::02. Concurrent Authentication",
+          "id": "2780b9a6ea09124038b77cc35c9fc4e3",
+          "groups": [],
+          "checks": [
+              {
+                "name": "Dang nhap - Status 200",
+                "path": "::02. Concurrent Authentication::Dang nhap - Status 200",
+                "id": "2ee149513f254791f38bd305afa941c4",
+                "passes": 1146,
+                "fails": 0
+              },
+              {
+                "name": "Dang nhap - Co Bearer Token",
+                "path": "::02. Concurrent Authentication::Dang nhap - Co Bearer Token",
+                "id": "50dc3ad5672176502a544ac9cf2d0af4",
+                "passes": 1146,
+                "fails": 0
+              }
+            ]
+        },
+        {
+          "path": "::03. Stress Queries & Filters",
+          "id": "7897631c71eead3f2328679aa52a52b6",
+          "groups": [],
+          "checks": [
+              {
+                "path": "::03. Stress Queries & Filters::Query tat ca tasks - Status 200",
+                "id": "a83aa2292718fe31b29b3c05339553ce",
+                "passes": 1146,
+                "fails": 0,
+                "name": "Query tat ca tasks - Status 200"
+              },
+              {
+                "name": "Query loc task - Status 200",
+                "path": "::03. Stress Queries & Filters::Query loc task - Status 200",
+                "id": "74b82228cb99d54a387aeb0045cf6769",
+                "passes": 1146,
+                "fails": 0
+              }
+            ],
+          "name": "03. Stress Queries & Filters"
+        },
+        {
+          "name": "04. Get Task By ID",
+          "path": "::04. Get Task By ID",
+          "id": "9116b71f6aa5ce504a5712160dfa0dc4",
+          "groups": [],
+          "checks": [
+              {
+                "name": "Chi tiet task - Status 200",
+                "path": "::04. Get Task By ID::Chi tiet task - Status 200",
+                "id": "a32499d2a1ec711d75cf6361c0d3e097",
+                "passes": 1146,
+                "fails": 0
+              }
+            ]
+        },
+        {
+          "name": "05. Concurrent Create Task",
+          "path": "::05. Concurrent Create Task",
+          "id": "9240b2b2b78f519950e75e3f109c6a1b",
+          "groups": [],
+          "checks": [
+              {
+                "fails": 0,
+                "name": "Tao task - Status 201",
+                "path": "::05. Concurrent Create Task::Tao task - Status 201",
+                "id": "1afec286e4ad3ada8abe139000a7d865",
+                "passes": 1146
+              },
+              {
+                "fails": 0,
+                "name": "Tao task - Co ID phan hoi",
+                "path": "::05. Concurrent Create Task::Tao task - Co ID phan hoi",
+                "id": "c6e1f1a8063f80831215c724b96f68b1",
+                "passes": 1146
+              }
+            ]
+        },
+        {
+          "id": "6492d74d6a3830ff57134a54cd0b56bd",
+          "groups": [],
+          "checks": [
+              {
+                "name": "Cap nhat task - Status 200",
+                "path": "::06. Concurrent Update Task::Cap nhat task - Status 200",
+                "id": "7995bc60b090c956daa5c58c7ca70895",
+                "passes": 1146,
+                "fails": 0
+              }
+            ],
+          "name": "06. Concurrent Update Task",
+          "path": "::06. Concurrent Update Task"
+        }
+      ]
+  },
+  "options": {
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": "",
+    "noColor": false
+  },
+  "state": {
+    "isStdErrTTY": false,
+    "testRunDurationMs": 60295.9966,
+    "isStdOutTTY": false
+  },
+  "metrics": {
+    "data_received": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 328907122,
+        "rate": 5454874.9593103165
+      }
+    },
+    "http_req_duration": {
+      "thresholds": {
+        "p(95)<800": {
+          "ok": true
+        },
+        "avg<400": {
+          "ok": true
+        }
+      },
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "min": 0,
+        "med": 1.4024999999999999,
+        "max": 48.1608,
+        "p(90)": 5.290650000000001,
+        "p(95)": 8.260695,
+        "avg": 2.464484766891047
+      }
+    },
+    "http_req_waiting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 6.6827299999999985,
+        "avg": 1.9945685739217118,
+        "min": 0,
+        "med": 1.11685,
+        "max": 48.1608,
+        "p(90)": 4.53237
+      }
+    },
+    "iterations": {
+      "contains": "default",
+      "values": {
+        "count": 1146,
+        "rate": 19.00623697461201
+      },
+      "type": "counter"
+    },
+    "vus": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "min": 1,
+        "max": 20,
+        "value": 1
+      }
+    },
+    "http_req_connecting": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "med": 0,
+        "max": 4.7592,
+        "p(90)": 0,
+        "p(95)": 0,
+        "avg": 0.0026389678384442783,
+        "min": 0
+      }
+    },
+    "iteration_duration": {
+      "values": {
+        "max": 791.5118,
+        "p(90)": 746.47295,
+        "p(95)": 756.1786500000001,
+        "avg": 725.5551715532287,
+        "min": 707.3552,
+        "med": 720.6302499999999
+      },
+      "type": "trend",
+      "contains": "time"
+    },
+    "checks": {
+      "contains": "default",
+      "values": {
+        "rate": 1,
+        "passes": 10314,
+        "fails": 0
+      },
+      "type": "rate"
+    },
+    "http_req_receiving": {
+      "values": {
+        "med": 0,
+        "max": 25.9925,
+        "p(90)": 0.8609700000000001,
+        "p(95)": 1.0282799999999999,
+        "avg": 0.44650109698329726,
+        "min": 0
+      },
+      "type": "trend",
+      "contains": "time"
+    },
+    "http_req_duration{expected_response:true}": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "max": 48.1608,
+        "p(90)": 5.290650000000001,
+        "p(95)": 8.260695,
+        "avg": 2.464484766891047,
+        "min": 0,
+        "med": 1.4024999999999999
+      }
+    },
+    "group_duration": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 3.094036489237917,
+        "min": 0,
+        "med": 1.4889999999999999,
+        "max": 48.1608,
+        "p(90)": 7.2999,
+        "p(95)": 11.401825
+      }
+    },
+    "vus_max": {
+      "values": {
+        "value": 20,
+        "min": 20,
+        "max": 20
+      },
+      "type": "gauge",
+      "contains": "default"
+    },
+    "http_req_blocked": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 0.012687334829219646,
+        "min": 0,
+        "med": 0,
+        "max": 38.949,
+        "p(90)": 0,
+        "p(95)": 0
+      }
+    },
+    "data_sent": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 2058386,
+        "rate": 34138.02103073623
+      }
+    },
+    "http_req_tls_handshaking": {
+      "contains": "time",
+      "values": {
+        "avg": 0,
+        "min": 0,
+        "med": 0,
+        "max": 0,
+        "p(90)": 0,
+        "p(95)": 0
+      },
+      "type": "trend"
+    },
+    "http_req_sending": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(95)": 0,
+        "avg": 0.02341509598603839,
+        "min": 0,
+        "med": 0,
+        "max": 16.3231,
+        "p(90)": 0
+      }
+    },
+    "http_req_failed": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 0,
+        "passes": 0,
+        "fails": 8022
+      },
+      "thresholds": {
+        "rate<0.05": {
+          "ok": true
+        }
+      }
+    },
+    "http_reqs": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 8022,
+        "rate": 133.04365882228407
+      }
+    }
+  }
+}
