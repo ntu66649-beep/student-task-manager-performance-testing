@@ -256,7 +256,7 @@
         </div>
         <div class="meta-item">
           <span class="meta-label">Thoi gian thuc hien</span>
-          <span class="meta-value">10/17/2026, 14:06:40</span>
+          <span class="meta-value">10/17/2026, 14:36:21</span>
         </div>
         <div class="meta-item">
           <span class="meta-label">Danh gia tong quan</span>
@@ -278,12 +278,12 @@
       </div>
       <div class="card">
         <div class="card-label">Throughput trung binh</div>
-        <div class="card-value">11.6 <span style="font-size: 1rem; font-weight: 500;">req/s</span></div>
+        <div class="card-value">11.7 <span style="font-size: 1rem; font-weight: 500;">req/s</span></div>
         <div class="card-sub">Tan suat dap ung yeu cau</div>
       </div>
       <div class="card">
         <div class="card-label">Response Time P95</div>
-        <div class="card-value">3.38 ms</div>
+        <div class="card-value">3.01 ms</div>
         <div class="card-sub">95% request nhanh hon muc nay</div>
       </div>
       <div class="card">
@@ -306,16 +306,6 @@
         <tbody>
           
           <tr>
-            <td class="font-mono"><strong>http_req_failed</strong></td>
-            <td class="font-mono">rate<0.01</td>
-            <td>
-              <span class="badge badge-pass">
-                PASS (DAT)
-              </span>
-            </td>
-          </tr>
-          
-          <tr>
             <td class="font-mono"><strong>http_req_duration</strong></td>
             <td class="font-mono">p(95)<300</td>
             <td>
@@ -328,6 +318,16 @@
           <tr>
             <td class="font-mono"><strong>http_req_duration</strong></td>
             <td class="font-mono">p(99)<500</td>
+            <td>
+              <span class="badge badge-pass">
+                PASS (DAT)
+              </span>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="font-mono"><strong>http_req_failed</strong></td>
+            <td class="font-mono">rate<0.01</td>
             <td>
               <span class="badge badge-pass">
                 PASS (DAT)
@@ -357,22 +357,22 @@
           </tr>
           <tr>
             <td>Trung binh (Average)</td>
-            <td class="font-mono"><strong>1.84 ms</strong></td>
+            <td class="font-mono"><strong>1.15 ms</strong></td>
             <td>Thoi gian phan hoi trung binh cua toan bo request</td>
           </tr>
           <tr>
             <td>Trung vi (Median)</td>
-            <td class="font-mono"><strong>1.70 ms</strong></td>
+            <td class="font-mono"><strong>0.78 ms</strong></td>
             <td>50% tong so request co thoi gian phan hoi duoi muc nay</td>
           </tr>
           <tr>
             <td>Phan vi 90% (P90)</td>
-            <td class="font-mono"><strong>2.97 ms</strong></td>
+            <td class="font-mono"><strong>2.20 ms</strong></td>
             <td>90% tong so request co thoi gian phan hoi duoi muc nay</td>
           </tr>
           <tr>
             <td>Phan vi 95% (P95)</td>
-            <td class="font-mono"><strong>3.38 ms</strong></td>
+            <td class="font-mono"><strong>3.01 ms</strong></td>
             <td>95% tong so request co thoi gian phan hoi duoi muc nay (Tieu chuan SLA)</td>
           </tr>
           <tr>
@@ -382,7 +382,7 @@
           </tr>
           <tr>
             <td>Lon nhat (Max)</td>
-            <td class="font-mono"><strong>4.46 ms</strong></td>
+            <td class="font-mono"><strong>12.53 ms</strong></td>
             <td>Thoi gian phan hoi cham nhat ghi nhan duoc</td>
           </tr>
         </tbody>
@@ -540,18 +540,18 @@
         <tbody>
           <tr>
             <td>Du lieu nhan (Data Received)</td>
-            <td class="font-mono">1.01 MB</td>
-            <td class="font-mono">50.15 KB/s</td>
+            <td class="font-mono">424.53 KB</td>
+            <td class="font-mono">20.67 KB/s</td>
           </tr>
           <tr>
             <td>Du lieu gui (Data Sent)</td>
             <td class="font-mono">53.7 KB</td>
-            <td class="font-mono">2.6 KB/s</td>
+            <td class="font-mono">2.62 KB/s</td>
           </tr>
           <tr>
             <td>So chu ky lap (Iterations)</td>
             <td class="font-mono">48 chu ky</td>
-            <td class="font-mono">2.32 chu ky/s</td>
+            <td class="font-mono">2.34 chu ky/s</td>
           </tr>
         </tbody>
       </table>

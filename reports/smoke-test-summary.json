@@ -1,103 +1,119 @@
 {
+  "options": {
+    "noColor": false,
+    "summaryTrendStats": [
+      "avg",
+      "min",
+      "med",
+      "max",
+      "p(90)",
+      "p(95)"
+    ],
+    "summaryTimeUnit": ""
+  },
   "state": {
-    "isStdOutTTY": false,
-    "isStdErrTTY": false,
-    "testRunDurationMs": 20651.1535
+    "testRunDurationMs": 20534.1202,
+    "isStdOutTTY": true,
+    "isStdErrTTY": true
   },
   "metrics": {
-    "vus_max": {
-      "values": {
-        "value": 5,
-        "min": 5,
-        "max": 5
-      },
-      "type": "gauge",
-      "contains": "default"
-    },
-    "http_req_blocked": {
-      "type": "trend",
-      "contains": "time",
-      "values": {
-        "med": 0,
-        "max": 23.5264,
-        "p(90)": 0,
-        "p(95)": 0,
-        "avg": 0.12705916666666664,
-        "min": 0
-      }
-    },
     "data_received": {
       "type": "counter",
       "contains": "data",
       "values": {
-        "count": 1060452,
-        "rate": 51350.73931826617
+        "count": 434721,
+        "rate": 21170.665982563012
+      }
+    },
+    "http_req_tls_handshaking": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 0,
+        "min": 0,
+        "med": 0,
+        "max": 0,
+        "p(90)": 0,
+        "p(95)": 0
+      }
+    },
+    "http_req_receiving": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "avg": 0.17270875,
+        "min": 0,
+        "med": 0,
+        "max": 2.7413,
+        "p(90)": 0.65996,
+        "p(95)": 0.795225
       }
     },
     "http_req_failed": {
+      "values": {
+        "fails": 240,
+        "rate": 0,
+        "passes": 0
+      },
       "thresholds": {
         "rate<0.01": {
           "ok": true
         }
       },
       "type": "rate",
-      "contains": "default",
-      "values": {
-        "passes": 0,
-        "fails": 240,
-        "rate": 0
-      }
-    },
-    "http_reqs": {
-      "type": "counter",
-      "contains": "default",
-      "values": {
-        "count": 240,
-        "rate": 11.621626850044963
-      }
+      "contains": "default"
     },
     "iterations": {
       "type": "counter",
       "contains": "default",
       "values": {
         "count": 48,
-        "rate": 2.3243253700089928
+        "rate": 2.337572758534841
       }
+    },
+    "http_req_duration{expected_response:true}": {
+      "type": "trend",
+      "contains": "time",
+      "values": {
+        "p(90)": 2.19744,
+        "p(95)": 3.0136249999999993,
+        "avg": 1.1536654166666662,
+        "min": 0,
+        "med": 0.78495,
+        "max": 12.5305
+      }
+    },
+    "checks": {
+      "type": "rate",
+      "contains": "default",
+      "values": {
+        "rate": 1,
+        "passes": 480,
+        "fails": 0
+      }
+    },
+    "iteration_duration": {
+      "values": {
+        "p(95)": 1721.56464,
+        "avg": 1710.2833375000002,
+        "min": 1703.5546,
+        "med": 1706.6943,
+        "max": 1748.764,
+        "p(90)": 1719.11928
+      },
+      "type": "trend",
+      "contains": "time"
     },
     "http_req_connecting": {
       "type": "trend",
       "contains": "time",
       "values": {
+        "avg": 0.012612499999999999,
         "min": 0,
         "med": 0,
-        "max": 1.2454,
+        "max": 1.0105,
         "p(90)": 0,
-        "p(95)": 0,
-        "avg": 0.022536666666666667
-      }
-    },
-    "iteration_duration": {
-      "type": "trend",
-      "contains": "time",
-      "values": {
-        "p(90)": 1730.8611,
-        "p(95)": 1742.5009049999999,
-        "avg": 1719.4203916666665,
-        "min": 1709.4594,
-        "med": 1715.84275,
-        "max": 1754.4936
-      }
-    },
-    "http_req_waiting": {
-      "type": "trend",
-      "contains": "time",
-      "values": {
-        "min": 0,
-        "med": 1.44795,
-        "max": 4.4617,
-        "p(90)": 2.59672,
-        "p(95)": 3.0138899999999995,
-        "avg": 1.5567745833333337
+        "p(95)": 0
       }
     },
     "vus": {
@@ -113,80 +129,44 @@
       "type": "trend",
       "contains": "time",
       "values": {
-        "med": 2.0501,
-        "max": 25.9005,
-        "p(90)": 4.47432,
-        "p(95)": 5.348165,
-        "avg": 2.559570833333335,
-        "min": 0
-      }
-    },
-    "data_sent": {
-      "type": "counter",
-      "contains": "data",
-      "values": {
-        "count": 54991,
-        "rate": 2662.8536754617608
-      }
-    },
-    "http_req_tls_handshaking": {
-      "type": "trend",
-      "contains": "time",
-      "values": {
-        "avg": 0,
+        "p(95)": 3.5880149999999986,
+        "avg": 1.4136041666666668,
         "min": 0,
-        "med": 0,
-        "max": 0,
-        "p(90)": 0,
-        "p(95)": 0
+        "med": 0.83795,
+        "max": 22.0501,
+        "p(90)": 2.9012599999999993
+      }
+    },
+    "http_reqs": {
+      "type": "counter",
+      "contains": "default",
+      "values": {
+        "count": 240,
+        "rate": 11.687863792674204
       }
     },
     "http_req_sending": {
       "type": "trend",
       "contains": "time",
       "values": {
+        "avg": 0.0021429166666666667,
         "min": 0,
         "med": 0,
-        "max": 0.5404,
+        "max": 0.5143,
         "p(90)": 0,
-        "p(95)": 0,
-        "avg": 0.017387916666666666
-      }
-    },
-    "http_req_receiving": {
-      "values": {
-        "p(90)": 0.9824799999999999,
-        "p(95)": 1.0235,
-        "avg": 0.2623270833333334,
-        "min": 0,
-        "med": 0,
-        "max": 1.4256
-      },
-      "type": "trend",
-      "contains": "time"
-    },
-    "http_req_duration{expected_response:true}": {
-      "type": "trend",
-      "contains": "time",
-      "values": {
-        "max": 4.4617,
-        "p(90)": 2.97287,
-        "p(95)": 3.381299999999998,
-        "avg": 1.8364895833333343,
-        "min": 0,
-        "med": 1.70465
+        "p(95)": 0
       }
     },
     "http_req_duration": {
       "type": "trend",
       "contains": "time",
       "values": {
-        "avg": 1.8364895833333343,
+        "avg": 1.1536654166666662,
         "min": 0,
-        "med": 1.70465,
-        "max": 4.4617,
-        "p(90)": 2.97287,
-        "p(95)": 3.381299999999998
+        "med": 0.78495,
+        "max": 12.5305,
+        "p(90)": 2.19744,
+        "p(95)": 3.0136249999999993
       },
       "thresholds": {
         "p(95)<300": {
@@ -197,144 +177,164 @@
         }
       }
     },
-    "checks": {
+    "http_req_blocked": {
+      "type": "trend",
+      "contains": "time",
       "values": {
-        "rate": 1,
-        "passes": 480,
-        "fails": 0
+        "avg": 0.08441041666666665,
+        "min": 0,
+        "med": 0,
+        "max": 14.9519,
+        "p(90)": 0,
+        "p(95)": 0
+      }
+    },
+    "http_req_waiting": {
+      "contains": "time",
+      "values": {
+        "avg": 0.9788137499999998,
+        "min": 0,
+        "med": 0.68655,
+        "max": 11.9129,
+        "p(90)": 2.10824,
+        "p(95)": 2.4256099999999985
       },
-      "type": "rate",
-      "contains": "default"
+      "type": "trend"
+    },
+    "vus_max": {
+      "type": "gauge",
+      "contains": "default",
+      "values": {
+        "max": 5,
+        "value": 5,
+        "min": 5
+      }
+    },
+    "data_sent": {
+      "type": "counter",
+      "contains": "data",
+      "values": {
+        "count": 54987,
+        "rate": 2677.835693199069
+      }
     }
   },
   "root_group": {
-    "checks": [],
-    "name": "",
-    "path": "",
     "id": "d41d8cd98f00b204e9800998ecf8427e",
     "groups": [
-        {
-          "groups": [],
-          "checks": [
-              {
-                "path": "::01. Health Check::Health Check - Status 200",
-                "id": "a648bcead52ef2fc91a8665db2a8ed25",
-                "passes": 48,
-                "fails": 0,
-                "name": "Health Check - Status 200"
-              },
-              {
-                "name": "Health Check - May chu UP",
-                "path": "::01. Health Check::Health Check - May chu UP",
-                "id": "c1eb5af45e5e40847b688475629271ea",
-                "passes": 48,
-                "fails": 0
-              }
-            ],
-          "name": "01. Health Check",
-          "path": "::01. Health Check",
-          "id": "5bc28b3920fb036da200f6a1cfbbd9c4"
-        },
-        {
-          "name": "02. Authentication Login",
-          "path": "::02. Authentication Login",
-          "id": "989f81fa0909dd9397c107f34e0023e6",
-          "groups": [],
-          "checks": [
-              {
-                "name": "Dang nhap - Status 200",
-                "path": "::02. Authentication Login::Dang nhap - Status 200",
-                "id": "b0ed59607f07f375862b4989b4224211",
-                "passes": 48,
-                "fails": 0
-              },
-              {
-                "passes": 48,
-                "fails": 0,
-                "name": "Dang nhap - Co token",
-                "path": "::02. Authentication Login::Dang nhap - Co token",
-                "id": "be70d46788a6c9810379bf58be147114"
-              }
-            ]
-        },
-        {
-          "name": "03. Get Task List",
-          "path": "::03. Get Task List",
-          "id": "27620565423dc22b95ab286b08f81ffe",
-          "groups": [],
-          "checks": [
-              {
-                "name": "Danh sach task - Status 200",
-                "path": "::03. Get Task List::Danh sach task - Status 200",
-                "id": "a3975001a6855b4b148ac27e762de66c",
-                "passes": 48,
-                "fails": 0
-              },
-              {
-                "passes": 48,
-                "fails": 0,
-                "name": "Danh sach task - Co du lieu hop le",
-                "path": "::03. Get Task List::Danh sach task - Co du lieu hop le",
-                "id": "d2f695643480eccab666b815e75b69da"
-              }
-            ]
-        },
-        {
-          "id": "e343e377c4691ee6a1006ec70b22528b",
-          "groups": [],
-          "checks": [
-              {
-                "name": "Chi tiet task - Status 200",
-                "path": "::04. Get Task Detail::Chi tiet task - Status 200",
-                "id": "d7a8e4b0cd97c4ae6a3addb42be88dd5",
-                "passes": 48,
-                "fails": 0
-              },
-              {
-                "passes": 48,
-                "fails": 0,
-                "name": "Chi tiet task - Dung ID 1",
-                "path": "::04. Get Task Detail::Chi tiet task - Dung ID 1",
-                "id": "1a0ab21b8c070c82fd77b845a3e0fa38"
-              }
-            ],
-          "name": "04. Get Task Detail",
-          "path": "::04. Get Task Detail"
-        },
-        {
-          "id": "85d9a536926f527bb9452ddcbc2c9750",
-          "groups": [],
-          "checks": [
-              {
-                "passes": 48,
-                "fails": 0,
-                "name": "Tao task - Status 201",
-                "path": "::05. Create New Task::Tao task - Status 201",
-                "id": "94a5e612b06aada2c872dbea262f0037"
-              },
-              {
-                "path": "::05. Create New Task::Tao task - Tao thanh cong",
-                "id": "0e656786e4e11afcda89bb686fe33149",
-                "passes": 48,
-                "fails": 0,
-                "name": "Tao task - Tao thanh cong"
-              }
-            ],
-          "name": "05. Create New Task",
-          "path": "::05. Create New Task"
-        }
-      ]
-  },
-  "options": {
-    "summaryTrendStats": [
-      "avg",
-      "min",
-      "med",
-      "max",
-      "p(90)",
-      "p(95)"
+      {
+        "name": "01. Health Check",
+        "path": "::01. Health Check",
+        "id": "5bc28b3920fb036da200f6a1cfbbd9c4",
+        "groups": [],
+        "checks": [
+            {
+              "name": "Health Check - Status 200",
+              "path": "::01. Health Check::Health Check - Status 200",
+              "id": "a648bcead52ef2fc91a8665db2a8ed25",
+              "passes": 48,
+              "fails": 0
+            },
+            {
+              "id": "c1eb5af45e5e40847b688475629271ea",
+              "passes": 48,
+              "fails": 0,
+              "name": "Health Check - May chu UP",
+              "path": "::01. Health Check::Health Check - May chu UP"
+            }
+          ]
+      },
+      {
+        "id": "989f81fa0909dd9397c107f34e0023e6",
+        "groups": [],
+        "checks": [
+            {
+              "passes": 48,
+              "fails": 0,
+              "name": "Dang nhap - Status 200",
+              "path": "::02. Authentication Login::Dang nhap - Status 200",
+              "id": "b0ed59607f07f375862b4989b4224211"
+            },
+            {
+              "path": "::02. Authentication Login::Dang nhap - Co token",
+              "id": "be70d46788a6c9810379bf58be147114",
+              "passes": 48,
+              "fails": 0,
+              "name": "Dang nhap - Co token"
+            }
+          ],
+        "name": "02. Authentication Login",
+        "path": "::02. Authentication Login"
+      },
+      {
+        "path": "::03. Get Task List",
+        "id": "27620565423dc22b95ab286b08f81ffe",
+        "groups": [],
+        "checks": [
+            {
+              "fails": 0,
+              "name": "Danh sach task - Status 200",
+              "path": "::03. Get Task List::Danh sach task - Status 200",
+              "id": "a3975001a6855b4b148ac27e762de66c",
+              "passes": 48
+            },
+            {
+              "passes": 48,
+              "fails": 0,
+              "name": "Danh sach task - Co du lieu hop le",
+              "path": "::03. Get Task List::Danh sach task - Co du lieu hop le",
+              "id": "d2f695643480eccab666b815e75b69da"
+            }
+          ],
+        "name": "03. Get Task List"
+      },
+      {
+        "groups": [],
+        "checks": [
+            {
+              "fails": 0,
+              "name": "Chi tiet task - Status 200",
+              "path": "::04. Get Task Detail::Chi tiet task - Status 200",
+              "id": "d7a8e4b0cd97c4ae6a3addb42be88dd5",
+              "passes": 48
+            },
+            {
+              "name": "Chi tiet task - Dung ID 1",
+              "path": "::04. Get Task Detail::Chi tiet task - Dung ID 1",
+              "id": "1a0ab21b8c070c82fd77b845a3e0fa38",
+              "passes": 48,
+              "fails": 0
+            }
+          ],
+        "name": "04. Get Task Detail",
+        "path": "::04. Get Task Detail",
+        "id": "e343e377c4691ee6a1006ec70b22528b"
+      },
+      {
+        "groups": [],
+        "checks": [
+            {
+              "id": "94a5e612b06aada2c872dbea262f0037",
+              "passes": 48,
+              "fails": 0,
+              "name": "Tao task - Status 201",
+              "path": "::05. Create New Task::Tao task - Status 201"
+            },
+            {
+              "passes": 48,
+              "fails": 0,
+              "name": "Tao task - Tao thanh cong",
+              "path": "::05. Create New Task::Tao task - Tao thanh cong",
+              "id": "0e656786e4e11afcda89bb686fe33149"
+            }
+          ],
+        "name": "05. Create New Task",
+        "path": "::05. Create New Task",
+        "id": "85d9a536926f527bb9452ddcbc2c9750"
+      }
     ],
-    "summaryTimeUnit": "",
-    "noColor": false
+    "checks": [],
+    "name": "",
+    "path": ""
   }
 }
