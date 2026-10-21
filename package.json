@@ -10,7 +10,10 @@
     "test:full": ".\\bin\\k6.exe run scripts/full_flow_test.js",
     "report:smoke": "powershell -Command Start-Process reports/smoke-test-report.html",
     "report:load": "powershell -Command Start-Process reports/load-test-report.html",
-    "report:stress": "powershell -Command Start-Process reports/stress-test-report.html"
+    "report:stress": "powershell -Command Start-Process reports/stress-test-report.html",
+    "report:build": "node tools/build-reports.mjs",
+    "report": "npm run report:build && powershell -NoProfile -Command Start-Process reports/index.html",
+    "report:full": "powershell -Command Start-Process reports/full-flow-test-report.html"
   },
   "keywords": [
     "swt301",

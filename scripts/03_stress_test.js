@@ -14,7 +14,7 @@ import { check, sleep, group } from 'k6';
 import { BASE_URL, THRESHOLDS, TEST_USER } from '../config/environment.js';
 import { generateTaskPayload, UPDATE_TASK_PAYLOAD } from '../data/test-payloads.js';
 import { checkHealth, login, getTasks, getTaskById, createTask, updateTask, deleteTask } from '../utils/api-client.js';
-import { generateHtmlReport, generateTextSummary } from '../utils/reporter.js';
+import { generateHtmlReport, generateTextSummary, generateDashboard, generateDashboardData } from '../utils/reporter.js';
 
 export const options = {
   stages: [
@@ -124,12 +124,15 @@ export default function () {
 
 export function handleSummary(data) {
   const reportOptions = {
+    reportKey: 'stress',
     testName: 'Stress Testing (Kiem thu do chiu tai toi han)',
     scenarioType: 'Stress Test (20 Nguoi dung ao - 20 VUs)',
     targetUrl: BASE_URL
   };
 
   return {
+    'reports/index.html': generateDashboard(),
+    'reports/stress-test-data.js': generateDashboardData(data, reportOptions),
     'reports/stress-test-report.html': generateHtmlReport(data, reportOptions),
     'reports/stress-test-summary.json': JSON.stringify(data, null, 2),
     stdout: generateTextSummary(data, reportOptions)

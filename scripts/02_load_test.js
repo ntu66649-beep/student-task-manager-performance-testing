@@ -13,7 +13,7 @@ import { check, sleep, group } from 'k6';
 import { BASE_URL, THRESHOLDS, TEST_USER } from '../config/environment.js';
 import { generateTaskPayload, UPDATE_TASK_PAYLOAD } from '../data/test-payloads.js';
 import { checkHealth, login, getTasks, getTaskById, createTask, updateTask } from '../utils/api-client.js';
-import { generateHtmlReport, generateTextSummary } from '../utils/reporter.js';
+import { generateHtmlReport, generateTextSummary, generateDashboard, generateDashboardData } from '../utils/reporter.js';
 
 export const options = {
   stages: [
@@ -159,12 +159,15 @@ export default function () {
 
 export function handleSummary(data) {
   const reportOptions = {
+    reportKey: 'load',
     testName: 'Load Testing (Kiem thu tai thong thuong)',
     scenarioType: 'Load Test (10 Nguoi dung ao - 10 VUs)',
     targetUrl: BASE_URL
   };
 
   return {
+    'reports/index.html': generateDashboard(),
+    'reports/load-test-data.js': generateDashboardData(data, reportOptions),
     'reports/load-test-report.html': generateHtmlReport(data, reportOptions),
     'reports/load-test-summary.json': JSON.stringify(data, null, 2),
     stdout: generateTextSummary(data, reportOptions)

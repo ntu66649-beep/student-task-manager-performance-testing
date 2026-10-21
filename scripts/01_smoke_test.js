@@ -13,7 +13,7 @@ import { check, sleep, group } from 'k6';
 import { BASE_URL, THRESHOLDS, TEST_USER } from '../config/environment.js';
 import { generateTaskPayload } from '../data/test-payloads.js';
 import { checkHealth, login, getTasks, getTaskById, createTask } from '../utils/api-client.js';
-import { generateHtmlReport, generateTextSummary } from '../utils/reporter.js';
+import { generateHtmlReport, generateTextSummary, generateDashboard, generateDashboardData } from '../utils/reporter.js';
 
 export const options = {
   stages: [
@@ -124,12 +124,15 @@ export default function () {
 
 export function handleSummary(data) {
   const reportOptions = {
+    reportKey: 'smoke',
     testName: 'Smoke Testing (Kiem thu khoi tao)',
     scenarioType: 'Smoke Test (5 Nguoi dung ao - 5 VUs)',
     targetUrl: BASE_URL
   };
 
   return {
+    'reports/index.html': generateDashboard(),
+    'reports/smoke-test-data.js': generateDashboardData(data, reportOptions),
     'reports/smoke-test-report.html': generateHtmlReport(data, reportOptions),
     'reports/smoke-test-summary.json': JSON.stringify(data, null, 2),
     stdout: generateTextSummary(data, reportOptions)

@@ -234,27 +234,29 @@ npm run report:load
 
 ---
 
-## 7. Huong dan doc va danh gia bao cao ket qua
+## 7. Dashboard bao cao hieu nang
 
-Moi bao cao HTML duoc thiet ke toi gian, chuyen nghiep va chia thanh 4 khu vuc ro rang:
+Giao dien thong nhat cho toan bo project nam tai reports/index.html. Mo truc tiep bang trinh duyet, khong can web server hay ket noi Internet.
 
-1. Khu vuc tieu de va trang thai tong the:
-   - Hien thi badge `KET QUA: PASS` (mau xanh la) neu tat ca tieu chi dat nguong, hoac `FAIL` (mau do) neu co tieu chi vi pham.
-   - Thong tin kich ban, URL muc tieu va thoi gian thuc hien.
+Dung lai giao dien tu JSON summary da co (khong chay lai k6):
 
-2. Cac the tong hop chi so chu chot (Key Metrics Cards):
-   - Nguoi dung ao (VUs): So luong VU thuc te tham gia tai dinh.
-   - Tong so Request: So luong yeu cau mang he thong da tiep nhan va xu ly.
-   - Throughput trung binh: Toc do xu ly dat duoc (req/s).
-   - Response Time P95: Thoi gian phan hoi tai phan vi 95% (tieu chuan danh gia cua nganh).
-   - Ty le loi (Error Rate): Ty le phan tram that bai (muc tieu: 0.00%).
+    npm run report:build
 
-3. Bang danh gia Thresholds (SLA):
-   - Liet ke tung bieu thuc nguong ky thuat va trang thai PASS/FAIL tuong ung.
+Dung bao cao va mo dashboard tren Windows:
 
-4. Bang thong ke Response Time Breakdown va Functional Checks:
-   - Chi tiet thoi gian phan hoi (Min, Avg, Med, P90, P95, P99, Max).
-   - Ket qua kiem tra ma trang thai HTTP va noi dung body JSON cho tung buoc thao tac.
+    npm run report
+
+- Trang tong quan: so sanh P95 / RPS, tong request, muc VU ghi nhan, ty le loi va ket qua SLA cua 4 kich ban.
+- Trang chi tiet: chi so chinh, phan bo response time, thong tin lan chay, bang SLA va functional checks.
+- Tim kiem / loc functional checks theo ket qua; doi giao dien sang / toi; tai JSON goc va in / luu PDF qua hop tho in cua trinh duyet.
+- Hien thi thich ung tren desktop, tablet va dien thoai; bang rong co the cuon ngang.
+- P99 khong co trong summary se hien thi N/A, khong thay bang 0. VUs ghi nhan lay tu vus.max; VUs cap phat duoc trinh bay rieng.
+
+Khi chay k6, handleSummary tu dong cap nhat trang chi tiet, JSON goc, reports/index.html va tap tin *-data.js tuong ung. Tai lai dashboard de xem du lieu moi. Giu cac file trong cung thu muc reports/ khi sao chep hoac chia se; tap tin du lieu giup dashboard chay ca khi mo bang file://.
+
+report:build can Node.js 18 tro len va khong can cai npm dependencies. Lenh nay giu nguyen JSON summary; neu chua co metadata lan chay, bao cao ghi "Du lieu kiem thu da luu". Khi dung lai tu summary cua dich khac, dat bien moi truong BASE_URL cho dung dich kiem thu.
+
+PASS/FAIL tong the phan anh thresholds do k6 danh gia. Functional checks duoc thong ke rieng. So lieu tren dashboard la summary cua cac lan chay doc lap, khong phai chuoi thoi gian hay ket qua mot bai chay dong thoi.
 
 ---
 
