@@ -44,21 +44,10 @@ function badge(passed, label) {
   return '<span class="badge ' + (passed === null ? 'neutral' : passed ? 'pass' : 'fail') + '"><span class="dot"></span>' +
     esc(label || (passed === null ? 'Chưa có dữ liệu' : passed ? 'PASS' : 'FAIL')) + '</span>';
 }
-function card(label, value, unit, hint, symbol) {
-  return '<article class="metric-card"><div class="metric-top"><span>' + esc(label) + '</span>' + icon(symbol || 'chart') +
+function card(label, value, unit, hint, symbol, tone = '') {
+  return '<article class="metric-card ' + esc(tone) + '"><div class="metric-top"><span>' + esc(label) + '</span>' + icon(symbol || 'chart') +
     '</div><div class="metric-value">' + esc(value) + (unit ? '<span>' + esc(unit) + '</span>' : '') +
     '</div><div class="metric-hint">' + esc(hint) + '</div></article>';
-}
-function chart(items, unit, title) {
-  const valid = items.filter(function(i) { return typeof i.value === 'number' && isFinite(i.value); });
-  const max = Math.max.apply(null, valid.map(function(i) { return i.value; }).concat([0.01]));
-  return '<div class="bar-chart" role="img" aria-label="' + esc(title + ': ' + items.map(function(i) { return i.label + ' ' + number(i.value, 2) + ' ' + unit; }).join('; ')) + '">' +
-    items.map(function(i) {
-      const exists = typeof i.value === 'number' && isFinite(i.value);
-      return '<div class="bar-row"><span class="bar-label">' + esc(i.label) + '</span><div class="bar-track"><span style="width:' +
-        (exists ? Math.max(0, i.value / max * 100) : 0) + '%;background:' + i.color +
-        '"></span></div><span class="bar-value">' + number(i.value, 2) + ' <small>' + esc(unit) + '</small></span></div>';
-    }).join('') + '</div>';
 }
 function model(data, options = {}) {
   const metrics = data.metrics || {};
@@ -89,24 +78,151 @@ function model(data, options = {}) {
   };
 }
 const STYLES = [
-':root{color-scheme:light;--bg:#f6f7f9;--panel:#fff;--text:#18252e;--muted:#667582;--line:#e6eaee;--accent:#c6532e;--soft:#fff0e9;--green:#26755c;--green-soft:#e9f5ef;--red:#b23f43;--red-soft:#fcebed;--track:#eef1f4}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:25px}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 "Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}body.dark{color-scheme:dark;--bg:#111b22;--panel:#1a2831;--text:#e8eef2;--muted:#a0b0bc;--line:#30414b;--accent:#ff9b78;--soft:#402d27;--green:#8dd3b5;--green-soft:#213d33;--red:#ffb2b8;--red-soft:#442c34;--track:#2d3c46}a{color:inherit;text-decoration:none}button,input,select{font:inherit}button{cursor:pointer}button svg,a svg{flex-shrink:0}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ed744a;outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-size:34px;line-height:1.2;letter-spacing:-1.1px;font-weight:650}h2{font-size:17px;letter-spacing:-.3px;font-weight:650}small{font-size:12px}[hidden]{display:none!important}.skip-link{position:fixed;top:-100px;left:20px;background:var(--panel);padding:12px;z-index:99}.skip-link:focus{top:12px}',
-'.sidebar{width:232px;position:fixed;inset:0 auto 0 0;background:#172c35;color:#d0dde3;padding:29px 20px;display:flex;flex-direction:column;z-index:20}.brand{display:flex;align-items:center;gap:11px;padding:0 9px 29px;color:#fff}.brand-mark{height:37px;width:37px;background:#f18a61;color:#172c35;border-radius:11px;display:grid;place-items:center;font-size:17px;font-weight:800;letter-spacing:-1px;flex-shrink:0}.brand strong{display:block;font-size:14px;letter-spacing:-.3px}.brand small{display:block;color:#b8c9d0;font-size:10px;letter-spacing:1.4px;text-transform:uppercase}.nav-label{font-size:10px;letter-spacing:1.6px;font-weight:600;color:#9eb2bd;padding:17px 13px 10px}.nav-link{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:8px;margin:3px 0;font-size:13px;color:#c4d1d8}.nav-link:hover{background:#ffffff0b;color:#fff}.nav-link.active{background:#ffffff12;color:#fff;box-shadow:inset 3px 0 #ef8b67}.nav-link.active svg{color:#f3a483}.nav-number{width:18px;text-align:center;font-size:11px;color:#9fb5c0}.nav-divider{height:1px;background:#ffffff14;margin:20px 10px 0}.sidebar-bottom{margin-top:auto;padding:20px 12px 0}.environment{border:1px solid #ffffff20;border-radius:9px;padding:12px}.environment small{display:block;color:#a7bcc7;margin-bottom:4px;font-size:9px;letter-spacing:.8px}.environment div{display:flex;gap:7px;align-items:center;color:#e3edf1;font-size:11px;overflow-wrap:anywhere}.environment .dot{background:#78c5a4}.sidebar-note{color:#b0c0c9;font-size:11px;margin:15px 0 0}.workspace{margin-left:232px}',
-'.topbar{height:77px;background:var(--panel);border-bottom:1px solid var(--line);padding:0 38px;display:flex;align-items:center;justify-content:space-between;gap:20px}.breadcrumbs{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:12px}.breadcrumbs b{color:var(--text);font-weight:500}.top-tools{display:flex;gap:8px;align-items:center}.tool-button,.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:7px;padding:8px 12px;font-size:12px;font-weight:600;min-height:36px}.tool-button{width:36px;padding:8px}.button:hover,.tool-button:hover{background:var(--bg);border-color:var(--muted)}main{max-width:1480px;margin:auto;padding:34px 38px 24px}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:27px}.eyebrow{color:var(--accent);font-size:10px;letter-spacing:1.7px;font-weight:700;text-transform:uppercase;margin-bottom:9px}.subtitle{color:var(--muted);margin-top:10px;font-size:13px}.heading-meta{font-size:11px;color:var(--muted);text-align:right;flex-shrink:0}.heading-meta strong{display:block;color:var(--text);font-size:12px;font-weight:500}',
-'.status-strip{display:flex;justify-content:space-between;align-items:center;gap:15px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:17px 20px;margin-bottom:20px}.status-main{display:flex;align-items:center;gap:13px}.status-icon{width:36px;height:36px;background:var(--green-soft);color:var(--green);border-radius:50%;display:grid;place-items:center;flex-shrink:0}.status-icon.fail{background:var(--red-soft);color:var(--red)}.status-main strong{font-weight:600;font-size:13px}.status-main p{font-size:12px;color:var(--muted);margin-top:2px}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:5px;padding:4px 8px;font-size:10px;font-weight:700;letter-spacing:.3px;white-space:nowrap}.badge.pass{background:var(--green-soft);color:var(--green)}.badge.fail{background:var(--red-soft);color:var(--red)}.badge.neutral{background:var(--track);color:var(--muted)}.dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:24px}.metric-card{padding:20px 21px;background:var(--panel);border:1px solid var(--line);border-radius:10px}.metric-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px}.metric-top svg{width:16px}.metric-value{font-size:31px;font-weight:650;letter-spacing:-1px;margin:12px 0 5px;font-variant-numeric:tabular-nums;white-space:nowrap}.metric-value>span{font-size:13px;letter-spacing:0;color:var(--muted);font-weight:400;margin-left:6px}.metric-hint{font-size:11px;color:var(--muted)}',
-'.grid-two{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:20px;margin-bottom:24px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}.panel-head{padding:21px 23px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.panel-head p{font-size:12px;color:var(--muted);margin-top:4px}.panel-body{padding:23px}.segmented{display:flex;gap:3px;border:1px solid var(--line);padding:3px;border-radius:6px;flex-shrink:0}.segmented button{border:0;border-radius:3px;padding:4px 9px;background:transparent;color:var(--muted);font-size:11px}.segmented button[aria-pressed="true"]{color:var(--text);background:var(--track);font-weight:600}.bar-chart{display:grid;gap:21px;margin:9px 0}.bar-row{display:flex;align-items:center;gap:14px}.bar-label{width:66px;flex-shrink:0;color:var(--muted);font-size:12px}.bar-track{height:11px;background:var(--track);border-radius:3px;flex:1;overflow:hidden}.bar-track>span{height:100%;display:block;border-radius:3px}.bar-value{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:85px}.bar-value small{font-size:10px;color:var(--muted);font-weight:400}.chart-note{font-size:10px;color:var(--muted);border-top:1px solid var(--line);margin-top:23px;padding-top:13px}.quality{display:flex;align-items:center;gap:23px;padding:10px 0 16px}.ring{height:112px;width:112px;position:relative;flex-shrink:0}.ring svg{transform:rotate(-90deg);height:100%;width:100%}.ring-value{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:24px;font-weight:650;letter-spacing:-.8px}.ring-value small{font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0}.quality-legend{font-size:12px;flex:1}.quality-legend>div{display:flex;justify-content:space-between;gap:16px;padding:6px 0}.quality-legend span{color:var(--muted)}.quality-foot{border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.quality-foot strong{color:var(--text)}',
-'.table-wrap{overflow:auto;margin-top:18px}table{border-collapse:collapse;width:100%;text-align:left;font-size:12px}th{background:var(--bg);color:var(--muted);font-weight:500;font-size:10px;letter-spacing:.4px;padding:12px 20px;white-space:nowrap}td{padding:18px 20px;border-top:1px solid var(--line)}td.numeric,th.numeric{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}tbody tr:hover{background:var(--bg)}.scenario-name{display:flex;align-items:center;gap:12px;min-width:175px}.scenario-number{width:33px;height:33px;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0}.scenario-name strong{display:block;font-size:12px;font-weight:600}.scenario-name small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.row-link{display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-weight:600;font-size:11px;white-space:nowrap}.row-link svg{width:14px}.panel-foot{padding:13px 23px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:12px}.section-gap{margin-bottom:24px}.footnote{padding:20px 0 5px;display:flex;align-items:center;justify-content:space-between;gap:20px;color:var(--muted);font-size:10px}.footnote strong{font-weight:500;color:var(--text)}.section-id{color:var(--muted);font-size:11px;letter-spacing:1px;margin-right:9px}.latency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}.latency-stat{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:13px 15px}.latency-stat span{display:block;color:var(--muted);font-size:11px}.latency-stat strong{display:block;font-size:17px;margin-top:4px;font-weight:600;font-variant-numeric:tabular-nums}.latency-stat.featured{background:var(--soft);border-color:transparent}.latency-stat.featured strong{color:var(--accent)}.mini-details>div{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12px}.mini-details>div:last-child{border:0}.mini-details span{color:var(--muted)}.mini-details strong{font-weight:500;text-align:right;overflow-wrap:anywhere}',
-'.check-toolbar{display:flex;gap:10px;align-items:center}.search-field{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;color:var(--muted)}.search-field input{width:175px;border:0;outline:0;background:transparent;color:var(--text);font-size:12px}.search-field:focus-within{outline:2px solid var(--accent);outline-offset:2px}.check-toolbar select{max-width:145px;border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--panel);color:var(--text);font-size:12px}.check-name{min-width:240px}.check-name small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.empty-message{padding:25px;text-align:center;color:var(--muted);font-size:12px}.help{margin-top:24px;padding:20px 23px;background:var(--soft);border-radius:10px;display:flex;align-items:flex-start;gap:13px}.help>svg{color:var(--accent);flex-shrink:0;margin-top:2px}.help h3{font-size:12px;margin-bottom:4px}.help p{color:var(--muted);font-size:11px;max-width:100ch}.info-chip{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:4px 8px;white-space:nowrap}.threshold-expression{font:12px Consolas,monospace}.progress{width:70px;height:5px;background:var(--track);border-radius:5px;display:inline-block;vertical-align:middle;margin-left:8px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green)}',
-'@media(min-width:1550px){main{padding-top:42px}.metrics{gap:20px}.metric-card{padding:24px}.bar-chart{gap:25px}}@media(max-width:1200px){.sidebar{width:205px;padding-left:14px;padding-right:14px}.workspace{margin-left:205px}main{padding:27px 24px}.topbar{padding:0 24px}.grid-two{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)}.metric-card{padding:17px}.metric-value{font-size:27px}.panel-head{padding:20px 18px 0}.panel-body{padding:20px 18px}.quality{gap:14px}.ring{width:95px;height:95px}td,th{padding-left:16px;padding-right:16px}.check-toolbar{flex-wrap:wrap}}@media(max-width:960px){.grid-two{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.quality{gap:30px}.quality-legend{max-width:280px}.heading-meta{display:none}.panel-head.check-heading{flex-direction:column;gap:15px}}',
-'@media(max-width:680px){.sidebar{position:relative;width:auto;padding:15px 16px 10px;display:block}.brand{padding:0 0 14px}.brand-mark{width:31px;height:31px;border-radius:8px;font-size:14px}.brand strong{font-size:14px}.brand small{font-size:9px}.nav-label,.nav-divider,.sidebar-bottom,.sidebar .help-link{display:none}.sidebar nav{display:flex;gap:5px;overflow:auto;padding-bottom:2px}.nav-link{white-space:nowrap;padding:9px 10px;font-size:11px;gap:6px}.nav-link svg{width:15px}.nav-number{display:none}.workspace{margin:0}.topbar{height:58px;padding:0 18px}.breadcrumbs{font-size:10px;gap:8px}.top-tools{gap:5px}.tool-button{width:31px;min-height:31px}.button{min-height:31px;padding:6px 9px;font-size:10px}.button svg{width:14px}.top-tools .print-label{display:none}main{padding:24px 17px 16px}h1{font-size:28px}.page-heading{margin-bottom:21px}.subtitle{font-size:12px}.eyebrow{font-size:9px}.status-strip{padding:14px;align-items:flex-start;gap:8px}.status-main{gap:10px}.status-main strong{font-size:12px}.status-main p{font-size:10px}.status-icon{width:29px;height:29px}.status-strip>.badge{font-size:9px}.metrics{gap:10px;margin-bottom:18px}.metric-card{padding:15px 13px}.metric-top{font-size:10px}.metric-value{font-size:26px;margin-top:10px}.metric-hint{font-size:9px}.metric-value>span{font-size:10px}.grid-two{gap:18px;margin-bottom:18px}.panel-head{padding:18px 16px 0;gap:8px}h2{font-size:15px}.panel-head p{font-size:10px}.segmented button{font-size:10px;padding:3px 7px}.panel-body{padding:20px 16px}.bar-row{gap:9px}.bar-label{width:53px;font-size:10px}.bar-value{min-width:70px;font-size:11px}.quality{padding:0 0 15px;gap:24px}.ring{width:100px;height:100px}.section-gap{margin-bottom:18px}.panel-foot{padding:12px 16px;font-size:10px}.footnote{font-size:9px;align-items:flex-start}.footnote>span:last-child{max-width:120px;text-align:right}.info-chip{font-size:9px}.latency-grid{gap:8px}.latency-stat{padding:11px}.latency-stat strong{font-size:14px}.latency-stat span{font-size:10px}.check-toolbar{width:100%}.search-field{flex:1;min-width:130px}.search-field input{width:100%;min-width:0}.check-toolbar select{width:105px;font-size:11px}.help{padding:16px}.help p{font-size:10px}}',
-'@media print{body,body.dark{color-scheme:light;--bg:#fff;--panel:#fff;--text:#17232c;--muted:#52616b;--line:#dce1e5;--green:#26755c;--green-soft:#e9f5ef;--red:#b23f43;--red-soft:#fcebed;--track:#eef1f4;--accent:#b74825;--soft:#fff0e9;font-size:11px}.sidebar,.topbar,.check-toolbar,.segmented,.help,.skip-link,.row-link,.no-print{display:none!important}.workspace{margin:0}main{padding:0;max-width:none}.metrics{grid-template-columns:repeat(4,1fr)}.grid-two{grid-template-columns:1.4fr 1fr;gap:12px}.panel,.metric-card,.status-strip{break-inside:avoid}.panel.checks-panel{break-inside:auto}tr{break-inside:avoid}.table-wrap{overflow:visible}.check-row[hidden]{display:table-row!important}.empty-message{display:none}.heading-meta{display:block}.page-heading{margin-top:15px}h1{font-size:25px}.panel-head,.panel-body{padding:14px}.metric-card{padding:13px}.metric-value{font-size:23px}.bar-chart{gap:14px}td,th{padding:10px}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{margin:12mm;size:A4 landscape}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}'
-].join('\n');
-const COMMON_SCRIPT = [
-'(function(){var body=document.body,theme=document.getElementById("theme-toggle");try{if(localStorage.getItem("stm-report-theme")==="dark")body.classList.add("dark");}catch(e){}',
-'function sync(){if(theme)theme.setAttribute("aria-pressed",String(body.classList.contains("dark")));}sync();if(theme)theme.addEventListener("click",function(){body.classList.toggle("dark");sync();try{localStorage.setItem("stm-report-theme",body.classList.contains("dark")?"dark":"light");}catch(e){}});',
-'var print=document.getElementById("print-report");if(print)print.addEventListener("click",function(){window.print();});',
-'var search=document.getElementById("check-search"),filter=document.getElementById("check-filter");function filterChecks(){var query=(search.value||"").trim().toLocaleLowerCase("vi"),mode=filter.value,visible=0;document.querySelectorAll(".check-row").forEach(function(row){var show=row.textContent.toLocaleLowerCase("vi").indexOf(query)!==-1&&(mode==="all"||row.dataset.status===mode);row.hidden=!show;if(show)visible++;});document.getElementById("check-count").textContent=visible+" / "+document.querySelectorAll(".check-row").length+" nội dung";document.getElementById("checks-empty").hidden=visible!==0;}if(search&&filter){search.addEventListener("input",filterChecks);filter.addEventListener("change",filterChecks);}',
-'var tabs=document.querySelectorAll("[data-chart-metric]");tabs.forEach(function(tab){tab.addEventListener("click",function(){tabs.forEach(function(button){button.setAttribute("aria-pressed",String(button===tab));});if(window.renderComparison)window.renderComparison(tab.dataset.chartMetric);});});})();'
-].join('\n');
+  ":root{color-scheme:light;--bg:#f6f7f9;--panel:#fff;--text:#18252e;--muted:#667582;--line:#e6eaee;--accent:#c6532e;--soft:#fff0e9;--green:#26755c;--green-soft:#e9f5ef;--red:#b23f43;--red-soft:#fcebed;--track:#eef1f4}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:25px}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 \"Segoe UI\",Arial,sans-serif;-webkit-font-smoothing:antialiased}body.dark{color-scheme:dark;--bg:#111b22;--panel:#1a2831;--text:#e8eef2;--muted:#a0b0bc;--line:#30414b;--accent:#ff9b78;--soft:#402d27;--green:#8dd3b5;--green-soft:#213d33;--red:#ffb2b8;--red-soft:#442c34;--track:#2d3c46}a{color:inherit;text-decoration:none}button,input,select{font:inherit}button{cursor:pointer}button svg,a svg{flex-shrink:0}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #ed744a;outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-size:34px;line-height:1.2;letter-spacing:-1.1px;font-weight:650}h2{font-size:17px;letter-spacing:-.3px;font-weight:650}small{font-size:12px}[hidden]{display:none!important}.skip-link{position:fixed;top:-100px;left:20px;background:var(--panel);padding:12px;z-index:99}.skip-link:focus{top:12px}",
+  ".sidebar{width:232px;position:fixed;inset:0 auto 0 0;background:#172c35;color:#d0dde3;padding:29px 20px;display:flex;flex-direction:column;z-index:20}.brand{display:flex;align-items:center;gap:11px;padding:0 9px 29px;color:#fff}.brand-mark{height:37px;width:37px;background:#f18a61;color:#172c35;border-radius:11px;display:grid;place-items:center;font-size:17px;font-weight:800;letter-spacing:-1px;flex-shrink:0}.brand strong{display:block;font-size:14px;letter-spacing:-.3px}.brand small{display:block;color:#b8c9d0;font-size:10px;letter-spacing:1.4px;text-transform:uppercase}.nav-label{font-size:10px;letter-spacing:1.6px;font-weight:600;color:#9eb2bd;padding:17px 13px 10px}.nav-link{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:8px;margin:3px 0;font-size:13px;color:#c4d1d8}.nav-link:hover{background:#ffffff0b;color:#fff}.nav-link.active{background:#ffffff12;color:#fff;box-shadow:inset 3px 0 #ef8b67}.nav-link.active svg{color:#f3a483}.nav-number{width:18px;text-align:center;font-size:11px;color:#9fb5c0}.nav-divider{height:1px;background:#ffffff14;margin:20px 10px 0}.sidebar-bottom{margin-top:auto;padding:20px 12px 0}.environment{border:1px solid #ffffff20;border-radius:9px;padding:12px}.environment small{display:block;color:#a7bcc7;margin-bottom:4px;font-size:9px;letter-spacing:.8px}.environment div{display:flex;gap:7px;align-items:center;color:#e3edf1;font-size:11px;overflow-wrap:anywhere}.environment .dot{background:#78c5a4}.sidebar-note{color:#b0c0c9;font-size:11px;margin:15px 0 0}.workspace{margin-left:232px}",
+  ".topbar{height:77px;background:var(--panel);border-bottom:1px solid var(--line);padding:0 38px;display:flex;align-items:center;justify-content:space-between;gap:20px}.breadcrumbs{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:12px}.breadcrumbs b{color:var(--text);font-weight:500}.top-tools{display:flex;gap:8px;align-items:center}.tool-button,.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:7px;padding:8px 12px;font-size:12px;font-weight:600;min-height:36px}.tool-button{width:36px;padding:8px}.button:hover,.tool-button:hover{background:var(--bg);border-color:var(--muted)}main{max-width:1480px;margin:auto;padding:34px 38px 24px}.page-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:27px}.eyebrow{color:var(--accent);font-size:10px;letter-spacing:1.7px;font-weight:700;text-transform:uppercase;margin-bottom:9px}.subtitle{color:var(--muted);margin-top:10px;font-size:13px}.heading-meta{font-size:11px;color:var(--muted);text-align:right;flex-shrink:0}.heading-meta strong{display:block;color:var(--text);font-size:12px;font-weight:500}",
+  ".status-strip{display:flex;justify-content:space-between;align-items:center;gap:15px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:17px 20px;margin-bottom:20px}.status-main{display:flex;align-items:center;gap:13px}.status-icon{width:36px;height:36px;background:var(--green-soft);color:var(--green);border-radius:50%;display:grid;place-items:center;flex-shrink:0}.status-icon.fail{background:var(--red-soft);color:var(--red)}.status-main strong{font-weight:600;font-size:13px}.status-main p{font-size:12px;color:var(--muted);margin-top:2px}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:5px;padding:4px 8px;font-size:10px;font-weight:700;letter-spacing:.3px;white-space:nowrap}.badge.pass{background:var(--green-soft);color:var(--green)}.badge.fail{background:var(--red-soft);color:var(--red)}.badge.neutral{background:var(--track);color:var(--muted)}.dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:24px}.metric-card{padding:20px 21px;background:var(--panel);border:1px solid var(--line);border-radius:10px}.metric-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:12px}.metric-top svg{width:16px}.metric-value{font-size:31px;font-weight:650;letter-spacing:-1px;margin:12px 0 5px;font-variant-numeric:tabular-nums;white-space:nowrap}.metric-value>span{font-size:13px;letter-spacing:0;color:var(--muted);font-weight:400;margin-left:6px}.metric-hint{font-size:11px;color:var(--muted)}",
+  ".grid-two{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:20px;margin-bottom:24px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}.panel-head{padding:21px 23px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}.panel-head p{font-size:12px;color:var(--muted);margin-top:4px}.panel-body{padding:23px}.segmented{display:flex;gap:3px;border:1px solid var(--line);padding:3px;border-radius:6px;flex-shrink:0}.segmented button{border:0;border-radius:3px;padding:4px 9px;background:transparent;color:var(--muted);font-size:11px}.segmented button[aria-pressed=\"true\"]{color:var(--text);background:var(--track);font-weight:600}.bar-chart{display:grid;gap:21px;margin:9px 0}.bar-row{display:flex;align-items:center;gap:14px}.bar-label{width:66px;flex-shrink:0;color:var(--muted);font-size:12px}.bar-track{height:11px;background:var(--track);border-radius:3px;flex:1;overflow:hidden}.bar-track>span{height:100%;display:block;border-radius:3px}.bar-value{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;min-width:85px}.bar-value small{font-size:10px;color:var(--muted);font-weight:400}.chart-note{font-size:10px;color:var(--muted);border-top:1px solid var(--line);margin-top:23px;padding-top:13px}.quality{display:flex;align-items:center;gap:23px;padding:10px 0 16px}.ring{height:112px;width:112px;position:relative;flex-shrink:0}.ring svg{transform:rotate(-90deg);height:100%;width:100%}.ring-value{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:24px;font-weight:650;letter-spacing:-.8px}.ring-value small{font-size:10px;font-weight:400;color:var(--muted);letter-spacing:0}.quality-legend{font-size:12px;flex:1}.quality-legend>div{display:flex;justify-content:space-between;gap:16px;padding:6px 0}.quality-legend span{color:var(--muted)}.quality-foot{border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}.quality-foot strong{color:var(--text)}",
+  ".table-wrap{overflow:auto;margin-top:18px}table{border-collapse:collapse;width:100%;text-align:left;font-size:12px}th{background:var(--bg);color:var(--muted);font-weight:500;font-size:10px;letter-spacing:.4px;padding:12px 20px;white-space:nowrap}td{padding:18px 20px;border-top:1px solid var(--line)}td.numeric,th.numeric{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}tbody tr:hover{background:var(--bg)}.scenario-name{display:flex;align-items:center;gap:12px;min-width:175px}.scenario-number{width:33px;height:33px;border:1px solid var(--line);border-radius:7px;display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--muted);flex-shrink:0}.scenario-name strong{display:block;font-size:12px;font-weight:600}.scenario-name small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.row-link{display:inline-flex;align-items:center;gap:7px;color:var(--accent);font-weight:600;font-size:11px;white-space:nowrap}.row-link svg{width:14px}.panel-foot{padding:13px 23px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:12px}.section-gap{margin-bottom:24px}.footnote{padding:20px 0 5px;display:flex;align-items:center;justify-content:space-between;gap:20px;color:var(--muted);font-size:10px}.footnote strong{font-weight:500;color:var(--text)}.section-id{color:var(--muted);font-size:11px;letter-spacing:1px;margin-right:9px}.latency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}.latency-stat{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:13px 15px}.latency-stat span{display:block;color:var(--muted);font-size:11px}.latency-stat strong{display:block;font-size:17px;margin-top:4px;font-weight:600;font-variant-numeric:tabular-nums}.latency-stat.featured{background:var(--soft);border-color:transparent}.latency-stat.featured strong{color:var(--accent)}.mini-details>div{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid var(--line);font-size:12px}.mini-details>div:last-child{border:0}.mini-details span{color:var(--muted)}.mini-details strong{font-weight:500;text-align:right;overflow-wrap:anywhere}",
+  ".check-toolbar{display:flex;gap:10px;align-items:center}.search-field{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;color:var(--muted)}.search-field input{width:175px;border:0;outline:0;background:transparent;color:var(--text);font-size:12px}.search-field:focus-within{outline:2px solid var(--accent);outline-offset:2px}.check-toolbar select{max-width:145px;border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--panel);color:var(--text);font-size:12px}.check-name{min-width:240px}.check-name small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.empty-message{padding:25px;text-align:center;color:var(--muted);font-size:12px}.help{margin-top:24px;padding:20px 23px;background:var(--soft);border-radius:10px;display:flex;align-items:flex-start;gap:13px}.help>svg{color:var(--accent);flex-shrink:0;margin-top:2px}.help h3{font-size:12px;margin-bottom:4px}.help p{color:var(--muted);font-size:11px;max-width:100ch}.info-chip{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:4px 8px;white-space:nowrap}.threshold-expression{font:12px Consolas,monospace}.progress{width:70px;height:5px;background:var(--track);border-radius:5px;display:inline-block;vertical-align:middle;margin-left:8px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green)}",
+  "@media(min-width:1550px){main{padding-top:42px}.metrics{gap:20px}.metric-card{padding:24px}.bar-chart{gap:25px}}@media(max-width:1200px){.sidebar{width:205px;padding-left:14px;padding-right:14px}.workspace{margin-left:205px}main{padding:27px 24px}.topbar{padding:0 24px}.grid-two{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)}.metric-card{padding:17px}.metric-value{font-size:27px}.panel-head{padding:20px 18px 0}.panel-body{padding:20px 18px}.quality{gap:14px}.ring{width:95px;height:95px}td,th{padding-left:16px;padding-right:16px}.check-toolbar{flex-wrap:wrap}}@media(max-width:960px){.grid-two{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.quality{gap:30px}.quality-legend{max-width:280px}.heading-meta{display:none}.panel-head.check-heading{flex-direction:column;gap:15px}}",
+  "@media(max-width:680px){.sidebar{position:relative;width:auto;padding:15px 16px 10px;display:block}.brand{padding:0 0 14px}.brand-mark{width:31px;height:31px;border-radius:8px;font-size:14px}.brand strong{font-size:14px}.brand small{font-size:9px}.nav-label,.nav-divider,.sidebar-bottom,.sidebar .help-link{display:none}.sidebar nav{display:flex;gap:5px;overflow:auto;padding-bottom:2px}.nav-link{white-space:nowrap;padding:9px 10px;font-size:11px;gap:6px}.nav-link svg{width:15px}.nav-number{display:none}.workspace{margin:0}.topbar{height:58px;padding:0 18px}.breadcrumbs{font-size:10px;gap:8px}.top-tools{gap:5px}.tool-button{width:31px;min-height:31px}.button{min-height:31px;padding:6px 9px;font-size:10px}.button svg{width:14px}.top-tools .print-label{display:none}main{padding:24px 17px 16px}h1{font-size:28px}.page-heading{margin-bottom:21px}.subtitle{font-size:12px}.eyebrow{font-size:9px}.status-strip{padding:14px;align-items:flex-start;gap:8px}.status-main{gap:10px}.status-main strong{font-size:12px}.status-main p{font-size:10px}.status-icon{width:29px;height:29px}.status-strip>.badge{font-size:9px}.metrics{gap:10px;margin-bottom:18px}.metric-card{padding:15px 13px}.metric-top{font-size:10px}.metric-value{font-size:26px;margin-top:10px}.metric-hint{font-size:9px}.metric-value>span{font-size:10px}.grid-two{gap:18px;margin-bottom:18px}.panel-head{padding:18px 16px 0;gap:8px}h2{font-size:15px}.panel-head p{font-size:10px}.segmented button{font-size:10px;padding:3px 7px}.panel-body{padding:20px 16px}.bar-row{gap:9px}.bar-label{width:53px;font-size:10px}.bar-value{min-width:70px;font-size:11px}.quality{padding:0 0 15px;gap:24px}.ring{width:100px;height:100px}.section-gap{margin-bottom:18px}.panel-foot{padding:12px 16px;font-size:10px}.footnote{font-size:9px;align-items:flex-start}.footnote>span:last-child{max-width:120px;text-align:right}.info-chip{font-size:9px}.latency-grid{gap:8px}.latency-stat{padding:11px}.latency-stat strong{font-size:14px}.latency-stat span{font-size:10px}.check-toolbar{width:100%}.search-field{flex:1;min-width:130px}.search-field input{width:100%;min-width:0}.check-toolbar select{width:105px;font-size:11px}.help{padding:16px}.help p{font-size:10px}}",
+  "@media print{body,body.dark{color-scheme:light;--bg:#fff;--panel:#fff;--text:#17232c;--muted:#52616b;--line:#dce1e5;--green:#26755c;--green-soft:#e9f5ef;--red:#b23f43;--red-soft:#fcebed;--track:#eef1f4;--accent:#b74825;--soft:#fff0e9;font-size:11px}.sidebar,.topbar,.check-toolbar,.segmented,.help,.skip-link,.row-link,.no-print{display:none!important}.workspace{margin:0}main{padding:0;max-width:none}.metrics{grid-template-columns:repeat(4,1fr)}.grid-two{grid-template-columns:1.4fr 1fr;gap:12px}.panel,.metric-card,.status-strip{break-inside:avoid}.panel.checks-panel{break-inside:auto}tr{break-inside:avoid}.table-wrap{overflow:visible}.check-row[hidden]{display:table-row!important}.empty-message{display:none}.heading-meta{display:block}.page-heading{margin-top:15px}h1{font-size:25px}.panel-head,.panel-body{padding:14px}.metric-card{padding:13px}.metric-value{font-size:23px}.bar-chart{gap:14px}td,th{padding:10px}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{margin:12mm;size:A4 landscape}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}",
+  "",
+  "/* Refined hierarchy and interaction surfaces. */",
+  ":root{--hero-bg:#18343f;--hero-fg:#f7fbfd;--hero-muted:#bcd0da;--radius:12px}",
+  "body{font-feature-settings:\"cv11\",\"ss01\";font-variant-numeric:tabular-nums}",
+  ".sidebar{background:linear-gradient(165deg,#18323d,#142b35)}",
+  ".topbar{height:64px}",
+  "main{padding:25px 32px 24px}",
+  "h1{font-size:30px;letter-spacing:-.9px;font-weight:700}",
+  ".page-heading{margin-bottom:17px;align-items:flex-end}",
+  ".subtitle{font-size:12px;margin-top:7px}",
+  ".eyebrow{font-size:9px;letter-spacing:1.5px;margin-bottom:7px}",
+  ".status-strip{padding:10px 14px;margin-bottom:18px;border-radius:8px;background:transparent}",
+  ".status-main{font-size:11px;color:var(--muted);gap:12px}",
+  ".status-caption{font-size:10px;color:var(--muted)}",
+  ".badge{padding:4px 7px;font-size:9px}",
+  ".metric-card{padding:18px 20px;border-radius:var(--radius);box-shadow:0 2px 4px #132c3903}",
+  ".metric-value{font-size:34px;line-height:1.15;letter-spacing:-1.2px;margin:14px 0 9px;font-weight:700}",
+  ".metric-top{font-size:11px}",
+  ".metric-hint{font-size:10px;line-height:1.5}",
+  ".metrics .metric-card:first-child{background:var(--hero-bg);color:var(--hero-fg);border-color:var(--hero-bg);position:relative;overflow:hidden}",
+  ".metrics .metric-card:first-child:after{content:\"\";position:absolute;right:-34px;bottom:-64px;width:145px;height:145px;border:1px solid #ffffff12;border-radius:50%;pointer-events:none}",
+  ".metrics .metric-card:first-child .metric-top,.metrics .metric-card:first-child .metric-hint,.metrics .metric-card:first-child .metric-value>span{color:var(--hero-muted)}",
+  ".metrics .metric-card:first-child .metric-top svg{color:#f4a07e}",
+  ".metric-success .metric-value{color:var(--green)}.metric-error .metric-value{color:var(--red)}",
+  ".metrics{gap:14px;margin-bottom:20px}",
+  ".grid-two{gap:18px;margin-bottom:20px;align-items:start}",
+  ".panel{border-radius:var(--radius)}",
+  ".panel-head{padding:19px 21px 0}",
+  ".panel-head h2{font-size:16px;font-weight:650;letter-spacing:-.4px}",
+  ".panel-head p{font-size:11px}",
+  ".panel-body{padding:20px 21px}",
+  ".chart-controls{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:22px}",
+  ".control-label{display:flex;flex-direction:column;gap:5px;font-size:9px;letter-spacing:.2px;color:var(--muted);min-width:100px}",
+  ".control-label select{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:7px 28px 7px 10px;color:var(--text);font-size:11px;min-height:34px;max-width:190px}",
+  ".pair-controls{display:flex;gap:9px;align-items:flex-end;flex:1}",
+  ".versus{font-size:10px;color:var(--muted);padding-bottom:10px}",
+  ".segmented button{min-height:28px}",
+  ".segmented button:disabled{opacity:.4;cursor:not-allowed}",
+  ".bar-chart{gap:15px;margin:0}",
+  ".chart-axis{display:flex;gap:14px;align-items:center;margin:0 0 2px;font-size:9px;color:var(--muted)}",
+  ".axis-unit{width:78px;flex-shrink:0}",
+  ".chart-axis>div{display:flex;justify-content:space-between;flex:1}",
+  ".chart-axis>span:last-child{min-width:85px}",
+  ".bar-row{position:relative;min-height:27px;gap:14px;border-radius:5px}",
+  ".bar-row:focus-visible{outline:2px solid var(--accent);outline-offset:4px}",
+  ".bar-label{width:78px;font-size:11px;display:flex;align-items:center;gap:7px;color:var(--text)}",
+  ".bar-label i{display:block;width:5px;height:5px;border-radius:50%;flex-shrink:0}",
+  ".bar-track{height:15px;border-radius:3px;background-color:var(--track);background-image:linear-gradient(to right,transparent calc(100% - 1px),var(--line) 0);background-size:25% 100%}",
+  ".bar-track>span{height:100%;border-radius:3px;transition:width .25s ease,opacity .15s ease}",
+  ".bar-row:hover .bar-track>span,.bar-row:focus .bar-track>span{opacity:.8}",
+  ".bar-row.selected .bar-label,.bar-row.selected .bar-value{color:var(--accent);font-weight:700}",
+  ".bar-value{font-size:12px}",
+  ".chart-tooltip{position:absolute;z-index:10;right:0;bottom:calc(100% + 7px);max-width:310px;padding:10px 13px;border-radius:7px;background:var(--text);color:var(--panel);box-shadow:0 8px 25px #0002;font-size:11px;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(3px);transition:opacity .12s ease,transform .12s ease}",
+  ".chart-tooltip strong{display:block;font-weight:600}",
+  ".chart-tooltip small{display:block;margin-top:3px;font-size:10px;opacity:.8}",
+  ".bar-row:hover .chart-tooltip,.bar-row:focus .chart-tooltip{opacity:1;visibility:visible;transform:translateY(0)}",
+  ".chart-note{font-size:10px;line-height:1.6;margin-top:19px;padding-top:12px}",
+  ".pair-summary{display:flex;justify-content:space-between;gap:15px;padding:13px 0 9px;border-top:1px solid var(--line);margin-top:15px;font-size:11px;color:var(--muted)}",
+  ".pair-summary strong{color:var(--text);font-size:14px}",
+  ".pair-table{margin-top:0;border:1px solid var(--line);border-radius:7px}",
+  ".pair-table th{font-size:9px;max-width:160px;white-space:normal}",
+  ".pair-table td,.pair-table th{padding:9px 12px}",
+  ".pair-table small{color:var(--muted);font-size:9px;margin-left:3px}",
+  ".selected-metric{background:var(--soft)}",
+  ".strong-number{font-weight:650}",
+  ".quality{padding:5px 0 15px}",
+  ".quality-legend{font-size:11px}",
+  ".quality-foot{font-size:10px}",
+  ".section-kicker{font-size:9px!important;color:var(--accent)!important;letter-spacing:1.2px;font-weight:650;margin:0 0 6px!important}",
+  ".latency-focus{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:8px;margin-bottom:16px;background:var(--bg)}",
+  ".latency-focus strong{font-size:18px;font-weight:650;color:var(--accent);white-space:nowrap}",
+  ".latency-focus span{color:var(--muted);font-size:10px;max-width:42ch}",
+  ".latency-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:18px}",
+  ".latency-stat{padding:10px 11px;border-radius:6px}",
+  ".latency-stat strong{font-size:13px;white-space:nowrap;margin-top:5px}",
+  ".latency-stat span{font-size:10px}",
+  ".latency-stat.selected{border-color:var(--accent);background:var(--soft)}",
+  ".run-panel .panel-head{padding-bottom:0}",
+  ".mini-details>div{padding:10px 0;font-size:11px}",
+  ".run-panel .panel-body{padding-top:12px;padding-bottom:15px}",
+  ".mini-details strong{max-width:65%}",
+  ".panel-foot{font-size:10px;padding:12px 20px}",
+  "td{padding-top:14px;padding-bottom:14px}",
+  "th{font-size:9px}",
+  ".search-field input{width:160px}",
+  ".check-heading{padding-bottom:17px;align-items:center}",
+  ".check-toolbar .button{font-size:10px;white-space:nowrap;min-height:34px}",
+  ".check-toolbar select{font-size:11px;max-width:140px;min-height:34px}",
+  ".check-groups{padding:0 20px 18px}",
+  ".check-group{border:1px solid var(--line);border-radius:8px;margin-top:10px;overflow:hidden;scroll-margin-top:20px}",
+  ".check-group:first-child{margin-top:0}",
+  ".check-group>summary{display:flex;align-items:center;gap:12px;padding:14px 15px;cursor:pointer;list-style:none;background:var(--panel)}",
+  ".check-group>summary::-webkit-details-marker{display:none}",
+  ".check-group>summary:hover{background:var(--bg)}",
+  ".check-group>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}",
+  ".group-chevron{border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);width:6px;height:6px;transform:rotate(-45deg);margin-right:3px;transition:transform .15s}",
+  ".check-group[open] .group-chevron{transform:rotate(45deg)}",
+  ".method{font:600 9px/1.5 Consolas,monospace;min-width:43px;text-align:center;border-radius:4px;padding:3px 5px;color:#336b91;background:#eaf3fa}",
+  ".method.post{color:#815829;background:#fbf2e6}",
+  ".method.put{color:#725299;background:#f1edf8}",
+  ".method.delete{color:var(--red);background:var(--red-soft)}",
+  ".group-title strong{font-size:12px;display:block;font-weight:650}",
+  ".group-title small{font-size:10px;display:block;color:var(--muted);margin-top:1px}",
+  ".group-result{margin-left:auto;display:flex;align-items:center;gap:14px}",
+  ".group-count{color:var(--muted);font-size:10px;white-space:nowrap}",
+  ".check-group .table-wrap{margin:0}",
+  ".check-group th{padding:9px 15px}",
+  ".check-group td{padding:12px 15px}",
+  ".check-name strong{font-weight:500;font-size:11px}",
+  ".check-name small{font-size:9px}",
+  ".has-failures{border-color:var(--red)}",
+  ".has-failures>summary{background:var(--red-soft)}",
+  ".check-failed{background:var(--red-soft)}",
+  ".check-failed .check-name strong,.failure-number{color:var(--red);font-weight:650}",
+  ".check-failed .progress span{background:var(--red)}",
+  ".failure-detail{display:block;margin-top:6px;font-size:10px;color:var(--red)}",
+  ".failure-notice{display:flex;align-items:center;gap:12px;padding:13px 15px;margin:0 20px 17px;background:var(--red-soft);border:1px solid var(--red);border-radius:8px;color:var(--red)}",
+  ".failure-notice strong{font-size:12px}",
+  ".failure-notice p{font-size:10px;margin-top:2px}",
+  ".failure-notice a{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:11px;white-space:nowrap}",
+  ".failure-marker{font-size:16px;width:24px;height:24px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;flex-shrink:0}",
+  ".sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}",
+  ".dark .method{background:#253e50;color:#a4d2f1}",
+  ".dark .method.post{background:#443a2c;color:#eed2a3}",
+  ".dark .method.put{background:#3b3249;color:#d4b6ec}",
+  ".dark .method.delete{background:var(--red-soft);color:var(--red)}",
+  "@media(min-width:1550px){main{padding-top:30px}.metric-card{padding:20px 23px}}",
+  "@media(max-width:1200px){main{padding:24px}.latency-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.pair-controls{width:100%;flex:auto}.check-heading{flex-wrap:wrap}.check-toolbar{gap:7px}}",
+  "@media(max-width:960px){.check-heading{align-items:stretch}.check-toolbar{width:100%}.search-field{flex:1}.search-field input{width:100%}.heading-meta{display:none}.grid-two{grid-template-columns:1fr}.latency-grid{grid-template-columns:repeat(6,minmax(0,1fr))}}",
+  "@media(max-width:680px){main{padding:21px 16px}.topbar{height:52px}h1{font-size:26px}.page-heading{margin-bottom:15px}.subtitle{font-size:11px}.status-strip{padding:9px 10px;margin-bottom:14px}.status-main{font-size:10px;gap:8px}.status-caption{display:none}.metrics{gap:9px;margin-bottom:17px}.metric-card{padding:15px 13px}.metric-value{font-size:27px;letter-spacing:-.7px;margin:12px 0 7px}.metric-hint{font-size:9px}.metric-top{font-size:10px}.panel-head{padding:17px 15px 0;flex-wrap:wrap;gap:10px}.panel-body{padding:17px 15px}.panel-head h2{font-size:15px}.comparison-panel .panel-head{align-items:center}.panel-head p{font-size:10px}.segmented button{font-size:10px;padding:3px 7px;min-height:26px}.axis-unit,.bar-label{width:56px;font-size:10px}.chart-axis{gap:10px}.bar-row{gap:10px}.chart-axis>span:last-child{min-width:68px}.bar-value{min-width:68px;font-size:11px}.bar-label i{display:none}.bar-track{height:13px}.chart-tooltip{max-width:270px;font-size:10px}.bar-chart{gap:14px}.pair-controls{gap:7px}.control-label{min-width:0;flex:1}.control-label select{max-width:100%;width:100%;font-size:10px;padding:7px 20px 7px 8px}.chart-controls>.control-label{flex:initial;min-width:125px}.pair-table th{font-size:8px}.pair-table td{font-size:11px}.latency-focus{padding:10px;align-items:flex-start;gap:10px}.latency-focus strong{font-size:16px}.latency-focus span{font-size:9px}.latency-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.latency-stat strong{font-size:13px}.check-heading{padding-bottom:15px}.check-toolbar{flex-wrap:wrap;gap:7px}.search-field{flex:1;min-width:180px}.check-toolbar select{max-width:none;flex:1}.check-groups{padding:0 12px 12px}.check-group>summary{padding:12px 10px;gap:8px}.method{min-width:37px;font-size:8px}.group-title strong{font-size:11px}.group-title small{font-size:9px;max-width:145px}.group-result{gap:6px}.group-count{display:none}.group-result .badge{font-size:8px}.group-chevron{width:5px;height:5px;flex-shrink:0}.failure-notice{margin:0 12px 12px;padding:10px;gap:8px;flex-wrap:wrap}.failure-notice a{font-size:10px}.failure-notice strong{font-size:11px}.check-name{min-width:230px}.progress{width:45px}.panel-foot{padding:12px 15px;font-size:9px}.check-heading .section-kicker{font-size:8px!important}}",
+  "@media print{.chart-controls,.latency-tabs,.chart-tooltip,.failure-notice a,#expand-checks{display:none!important}.status-strip{padding:8px 12px}.metrics .metric-card:first-child{background:#18343f!important;color:#fff!important}.metrics{grid-template-columns:repeat(4,1fr)}.grid-two{grid-template-columns:1.8fr 1fr}.bar-track>span{transition:none}.check-group{break-inside:auto}.check-group>summary{break-after:avoid}.check-group table{width:100%}.check-group[hidden]{display:block!important}.latency-grid{grid-template-columns:repeat(6,1fr)}.check-groups{padding:0 12px 12px}.pair-table{break-inside:avoid}}",
+  "@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}",
+  ""
+].join("\n");
+const COMMON_SCRIPT = "(" + initializeUI.toString() + ")();";
 function shell(title, key, content, scripts, targetUrl) {
   const scenario = SCENARIOS.find(function(s) { return s.key === key; });
   const links = SCENARIOS.map(function(s,i) {
@@ -135,75 +251,11 @@ function guide(dashboard) {
   return '<aside class="help" id="reading-guide">' + icon('book') + '<div><h3>Đọc báo cáo trong một phút</h3><p>P95 là thời gian phản hồi mà 95% request không vượt quá. Throughput là tổng request mỗi giây. PASS/FAIL được lấy từ các threshold do k6 đánh giá; functional checks được trình bày riêng. N/A nghĩa là chỉ số chưa được xuất trong dữ liệu.' +
     (dashboard ? ' Các kịch bản chạy độc lập; tổng request chỉ là tổng số của những báo cáo hiện có. Sau mỗi lần chạy k6, mở lại trang để tải dữ liệu mới.' : '') + '</p></div></aside>';
 }
-function comparisonItems(models, metric) {
-  return SCENARIOS.map(function(s) {
-    const m = models.find(function(m) { return m.key === s.key; });
-    return { label: s.short, color: s.color, value: m ? (metric === 'rps' ? m.requests.rate : m.latency['p(95)']) : undefined };
-  });
-}
-function dashboardContent(models) {
-  const unknown = models.some(function(m) { return m.status === null; });
-  const allPassed = models.length && !unknown ? models.every(function(m) { return m.status; }) : null;
-  const total = models.reduce(function(sum,m) { return sum + (m.requests.count || 0); }, 0);
-  const errors = models.reduce(function(sum,m) { return sum + (m.errors.passes || 0); }, 0);
-  const observed = models.map(function(m) { return m.vus; }).filter(function(v) { return typeof v === 'number'; });
-  const maxVus = observed.length ? Math.max.apply(null, observed) : undefined;
-  const rows = SCENARIOS.map(function(s,i) {
-    const m = models.find(function(r) { return r.key === s.key; });
-    return '<tr><td><a class="scenario-name" href="' + s.file + '-report.html"><span class="scenario-number">0' + (i+1) + '</span><span><strong>' + s.title + '</strong><small>' + s.description + '</small></span></a></td><td class="numeric">' + (m ? number(m.vus) : '—') + '</td><td class="numeric">' + (m ? number(m.durationMs/1000,1)+' s' : '—') + '</td><td class="numeric">' + (m ? number(m.requests.count) : '—') + '</td><td class="numeric">' + (m ? number(m.requests.rate,1) : '—') + '</td><td class="numeric">' + (m ? duration(m.latency['p(95)']) : '—') + '</td><td>' + badge(m ? m.status : null) + '</td><td><a class="row-link" href="' + s.file + '-report.html">Chi tiết ' + icon('arrow') + '</a></td></tr>';
-  }).join('');
-  return heading('Tổng quan hiệu năng','Một góc nhìn thống nhất cho toàn bộ kịch bản kiểm thử.','Performance overview') +
-    '<div class="status-strip"><div class="status-main"><span class="status-icon ' + (allPassed === false ? 'fail' : '') + '">' + icon('check') + '</span><div><strong>' +
-    (!models.length ? 'Chưa có báo cáo kiểm thử' : allPassed ? 'Các kịch bản hiện có đều đạt ngưỡng SLA' : unknown ? 'Một số báo cáo chưa có kết quả SLA' : 'Có kịch bản chưa đạt ngưỡng SLA') + '</strong><p>' + models.length +
-    ' / 4 báo cáo có dữ liệu · Xem kết quả chi tiết theo từng kịch bản</p></div></div>' + badge(allPassed,models.length ? 'SLA '+(allPassed === null ? 'N/A' : allPassed ? 'PASSED' : 'FAILED') : undefined) + '</div>' +
-    '<div class="metrics">' + card('Kịch bản kiểm thử',models.length+' / 4','','Smoke · Load · Stress · Full Flow','grid') +
-    card('Tổng request',number(total),'','Tổng từ các báo cáo hiện có','chart') +
-    card('Mức tải ghi nhận cao nhất',number(maxVus),'VUs','Số VU quan sát trong summary','bolt') +
-    card('Tỷ lệ request lỗi',number(total ? errors/total*100 : undefined,2),'%',number(errors)+' request thất bại','check') + '</div>' +
-    '<div class="grid-two"><section class="panel"><div class="panel-head"><div><h2>So sánh hiệu năng</h2><p id="comparison-subtitle">Thời gian phản hồi P95 · thấp hơn là tốt hơn</p></div><div class="segmented" role="group" aria-label="Chỉ số so sánh"><button data-chart-metric="p95" aria-pressed="true">P95</button><button data-chart-metric="rps" aria-pressed="false">RPS</button></div></div><div class="panel-body"><div id="comparison-chart">' +
-    chart(comparisonItems(models,'p95'),'ms','So sánh P95') + '</div><p class="chart-note" id="comparison-note">Số liệu tổng hợp từng lần chạy, không phải biểu đồ theo thời gian.</p></div></section>' + qualityPanel(models) +
-    '</div><section class="panel"><div class="panel-head"><div><h2>Các kịch bản kiểm thử</h2><p>Từ kiểm tra tính sẵn sàng đến toàn bộ vòng đời CRUD</p></div><span class="info-chip">4 kịch bản</span></div><div class="table-wrap"><table><thead><tr><th>KỊCH BẢN</th><th class="numeric">VUs</th><th class="numeric">THỜI GIAN</th><th class="numeric">REQUESTS</th><th class="numeric">REQ / S</th><th class="numeric">P95</th><th>KẾT QUẢ SLA</th><th aria-label="Xem báo cáo"></th></tr></thead><tbody>' +
-    rows + '</tbody></table></div><div class="panel-foot"><span>Chọn kịch bản để xem phân tích và functional checks.</span><span>Đơn vị thời gian: ms</span></div></section>' + guide(true);
-}
 function scriptJSON(data) { return JSON.stringify(data).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029'); }
 /** Sidecars keep the dashboard fresh on each k6 run, including file:// use. */
 export function generateDashboardData(data, options = {}) {
   if (!SCENARIOS.some(function(s) { return s.key === options.reportKey; })) throw new Error('Unknown reportKey');
   return 'window.STM_REPORTS = window.STM_REPORTS || {};\nwindow.STM_REPORTS[' + scriptJSON(options.reportKey) + '] = ' + scriptJSON(model(data,options)) + ';\n';
-}
-export function generateDashboard() {
-  const dependencies = [esc,number,duration,icon,badge,card,chart,qualityPanel,heading,guide,comparisonItems,dashboardContent].map(function(fn) { return fn.toString(); }).join('\n');
-  const scripts = SCENARIOS.map(function(s) { return '<script src="'+s.file+'-data.js"></script>'; }).join('') +
-    '<script>var SCENARIOS=' + scriptJSON(SCENARIOS) + ';' + dependencies +
-    '\nvar models=SCENARIOS.map(function(s){return (window.STM_REPORTS||{})[s.key];}).filter(Boolean);document.getElementById("dashboard-content").innerHTML=dashboardContent(models);window.renderComparison=function(metric){document.getElementById("comparison-chart").innerHTML=chart(comparisonItems(models,metric),metric==="rps"?"req/s":"ms",metric==="rps"?"So sánh throughput":"So sánh P95");document.getElementById("comparison-subtitle").textContent=metric==="rps"?"Throughput · tổng request mỗi giây":"Thời gian phản hồi P95 · thấp hơn là tốt hơn";document.getElementById("comparison-note").textContent=metric==="rps"?"Mức VU và thời gian nghỉ khác nhau giữa các kịch bản; RPS không biểu thị tải tương đương.":"Số liệu tổng hợp từng lần chạy, không phải biểu đồ theo thời gian.";};</script>';
-  return shell('Tổng quan hiệu năng','', '<div id="dashboard-content">'+dashboardContent([])+'</div><noscript><p class="empty-message">Bật JavaScript để xem tổng quan. Các liên kết báo cáo chi tiết vẫn hoạt động.</p></noscript>',scripts);
-}
-export function generateHtmlReport(data, options = {}) {
-  const m = model(data,options);
-  const scenario = SCENARIOS.find(function(s) { return s.key === m.key; });
-  const checks = m.checks;
-  const rows = checks.map(function(c) {
-    const total = c.passes+c.fails, rate = total ? c.passes/total*100 : undefined;
-    return '<tr class="check-row" data-status="'+(c.fails ? 'fail' : 'pass')+'"><td class="check-name">'+esc(c.name)+'<small>'+esc(c.group)+'</small></td><td class="numeric">'+number(c.passes)+'</td><td class="numeric">'+number(c.fails)+'</td><td class="numeric">'+number(rate,1)+'%<span class="progress" aria-hidden="true"><span style="width:'+(rate||0)+'%"></span></span></td><td>'+badge(total ? c.fails===0 : null)+'</td></tr>';
-  }).join('');
-  const thresholds = m.thresholds.map(function(t) { return '<tr><td>'+esc(t.metric)+'</td><td class="threshold-expression">'+esc(t.expression)+'</td><td>'+badge(t.passed)+'</td></tr>'; }).join('');
-  const timestamp = m.generatedAt === 'saved' ? 'Dữ liệu kiểm thử đã lưu' : 'Tạo báo cáo: '+new Date(m.generatedAt).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'});
-  const latency = [['Avg','avg'],['Median','med'],['P90','p(90)'],['P95','p(95)'],['P99','p(99)'],['Max','max']];
-  const content = heading(m.title,scenario ? scenario.description+' · Student Task Manager REST API' : m.scenarioType,'Scenario report',esc(timestamp)+'<strong>'+esc(m.targetUrl)+'</strong>') +
-    '<div class="status-strip"><div class="status-main"><span class="status-icon '+(m.status===false ? 'fail' : '')+'">'+icon('check')+'</span><div><strong>'+(m.status===null ? 'Chưa có threshold được thiết lập' : m.status ? 'Kịch bản đạt các ngưỡng SLA đã thiết lập' : 'Kịch bản có ngưỡng SLA chưa đạt')+'</strong><p>'+
-    m.thresholds.filter(function(t) { return t.passed; }).length+' / '+m.thresholds.length+' tiêu chí đạt · Functional checks được thống kê riêng bên dưới</p></div></div>'+badge(m.status)+'</div>' +
-    '<div class="metrics">'+card('Tổng request',number(m.requests.count),'',number(m.iterations.count)+' iterations hoàn thành','chart')+
-    card('Throughput trung bình',number(m.requests.rate,1),'req/s','Trên toàn bộ thời gian chạy','bolt')+
-    card('Thời gian phản hồi P95',number(m.latency['p(95)'],2),'ms','95% request không vượt quá mức này','clock')+
-    card('Tỷ lệ request lỗi',number(typeof m.errors.rate==='number' ? m.errors.rate*100 : undefined,2),'%',number(m.errors.passes)+' request thất bại','check')+'</div>'+
-    '<div class="grid-two"><section class="panel"><div class="panel-head"><div><h2>Thời gian phản hồi</h2><p>Phân bố các chỉ số tổng hợp · milliseconds</p></div><span class="info-chip">HTTP duration</span></div><div class="panel-body">'+
-    chart(latency.slice(0,4).map(function(item) { return {label:item[0],value:m.latency[item[1]],color:item[0]==='P95' ? '#ed744a' : '#809aa8'}; }),'ms','Thời gian phản hồi')+
-    '<div class="latency-grid">'+latency.map(function(item) { return '<div class="latency-stat '+(item[0]==='P95' ? 'featured' : '')+'"><span>'+item[0]+'</span><strong>'+duration(m.latency[item[1]])+'</strong></div>'; }).join('')+'</div><p class="chart-note">P99 chỉ hiển thị khi có trong summary. N/A không có nghĩa là 0 ms.</p></div></section>'+
-    '<section class="panel"><div class="panel-head"><div><h2>Thông tin lần chạy</h2><p>Môi trường và lưu lượng ghi nhận</p></div>'+icon('chart')+'</div><div class="panel-body"><div class="mini-details">'+
-    '<div><span>Đích kiểm thử</span><strong>'+esc(m.targetUrl)+'</strong></div><div><span>Thời gian thực thi</span><strong>'+number(typeof m.durationMs==='number' ? m.durationMs/1000 : undefined,2)+' s</strong></div><div><span>VUs ghi nhận / cấp phát</span><strong>'+number(m.vus)+' / '+number(m.allocatedVus)+'</strong></div><div><span>Dữ liệu nhận</span><strong>'+bytes(m.received.count)+'</strong></div><div><span>Dữ liệu gửi</span><strong>'+bytes(m.sent.count)+'</strong></div><div><span>Response time nhỏ nhất</span><strong>'+duration(m.latency.min)+'</strong></div></div></div></section></div>'+
-    '<section class="panel section-gap" id="thresholds"><div class="panel-head"><div><h2><span class="section-id">01</span>Ngưỡng đánh giá SLA</h2><p>Kết quả nguyên bản do k6 đánh giá</p></div><span class="info-chip">'+m.thresholds.length+' tiêu chí</span></div><div class="table-wrap"><table><thead><tr><th>CHỈ SỐ</th><th>ĐIỀU KIỆN</th><th>KẾT QUẢ</th></tr></thead><tbody>'+(thresholds||'<tr><td colspan="3">Chưa có ngưỡng đánh giá.</td></tr>')+'</tbody></table></div></section>'+
-    '<section class="panel checks-panel" id="checks"><div class="panel-head check-heading"><div><h2><span class="section-id">02</span>Functional checks</h2><p>Xác minh nội dung và mã phản hồi của từng thao tác</p></div><div class="check-toolbar"><label class="search-field">'+icon('search')+'<input type="search" id="check-search" placeholder="Tìm nội dung kiểm tra…" aria-label="Tìm functional check"></label><select id="check-filter" aria-label="Lọc kết quả check"><option value="all">Tất cả</option><option value="pass">Đạt</option><option value="fail">Không đạt</option></select></div></div><div class="table-wrap"><table><thead><tr><th>NỘI DUNG KIỂM TRA</th><th class="numeric">ĐẠT</th><th class="numeric">KHÔNG ĐẠT</th><th class="numeric">TỶ LỆ ĐẠT</th><th>KẾT QUẢ</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="empty-message" id="checks-empty" '+(checks.length ? 'hidden' : '')+'>Không có nội dung kiểm tra phù hợp.</p><div class="panel-foot"><span id="check-count" role="status" aria-live="polite">'+checks.length+' / '+checks.length+' nội dung</span><span>'+number(m.checkTotals.passes)+' checks đạt · '+number(m.checkTotals.fails)+' checks lỗi</span></div></section>'+guide(false);
-  return shell(m.title,m.key,content,'',m.targetUrl);
 }
 export function generateTextSummary(data, options = {}) {
   const scenarioType = options.scenarioType || 'Performance Test';
@@ -245,3 +297,440 @@ export function generateTextSummary(data, options = {}) {
 
 function formatNumber(num, decimals = 2) { if (num === undefined || num === null || isNaN(num)) return "0.00"; return Number(num).toFixed(decimals); }
 function formatDuration(ms) { if (!ms || ms === 0) return "0 ms"; if (ms < 1000) return formatNumber(ms, 2) + " ms"; return formatNumber(ms / 1000, 2) + " s"; }
+
+/* Rendering helpers shared with the offline dashboard's browser bundle. */
+function chart(items, unit, title) {
+  const maximum = Math.max.apply(null, items.map(function(item) {
+    return typeof item.value === 'number' && isFinite(item.value) ? item.value : 0;
+  }).concat([0.01]));
+  const magnitude = Math.pow(10, Math.floor(Math.log(maximum) / Math.LN10));
+  const ratio = maximum / magnitude;
+  const limit = (ratio <= 1 ? 1 : ratio <= 2 ? 2 : ratio <= 5 ? 5 : 10) * magnitude;
+  const step = limit / 4;
+  let tickDigits = 0;
+  while (tickDigits < 6 && Math.abs(Math.round(step * Math.pow(10, tickDigits)) - step * Math.pow(10, tickDigits)) > 1e-8) tickDigits++;
+  const ticks = [0, .25, .5, .75, 1].map(function(fraction) {
+    return '<span>' + number(limit * fraction, tickDigits) + '</span>';
+  }).join('');
+  return '<div class="bar-chart" role="group" aria-label="' + esc(title) + '">' +
+    '<div class="chart-axis"><span class="axis-unit">' + esc(unit) + '</span><div>' + ticks + '</div><span></span></div>' +
+    items.map(function(item) {
+      const exists = typeof item.value === 'number' && isFinite(item.value);
+      const label = item.label + ': ' + number(item.value, 2) + (exists ? ' ' + unit : '');
+      return '<div class="bar-row' + (item.selected ? ' selected' : '') + '" tabindex="0" aria-label="' + esc(label) + '">' +
+        '<span class="bar-label"><i style="background:' + item.color + '"></i>' + esc(item.label) + '</span>' +
+        '<div class="bar-track"><span style="width:' + (exists ? Math.max(0, item.value / limit * 100) : 0) + '%;background:' + item.color + '"></span></div>' +
+        '<span class="bar-value">' + number(item.value, 2) + ' <small>' + (exists ? esc(unit) : '') + '</small></span>' +
+        '<span class="chart-tooltip" role="tooltip"><strong>' + esc(label) + '</strong>' +
+        (item.description ? '<small>' + esc(item.description) + '</small>' : '') + '</span></div>';
+    }).join('') + '</div>';
+}
+const CHART_METRICS = [
+  { key: 'avg', label: 'Avg', field: 'avg', description: 'Thời gian phản hồi trung bình của toàn bộ request.' },
+  { key: 'p90', label: 'P90', field: 'p(90)', description: '90% request có thời gian phản hồi không vượt quá giá trị này.' },
+  { key: 'p95', label: 'P95', field: 'p(95)', description: '95% request có thời gian phản hồi không vượt quá giá trị này.' },
+  { key: 'max', label: 'Max', field: 'max', description: 'Thời gian phản hồi lớn nhất ghi nhận trong lần chạy.' },
+  { key: 'rps', label: 'RPS', field: 'rate', description: 'Tổng số request mỗi giây, gồm cả request lỗi.' }
+];
+function metricValue(report, key) {
+  const metric = CHART_METRICS.find(function(item) { return item.key === key; });
+  return report && metric ? key === 'rps' ? report.requests.rate : report.latency[metric.field] : undefined;
+}
+function metricOptions(selected) {
+  return CHART_METRICS.map(function(metric) {
+    return '<option value="' + metric.key + '"' + (selected === metric.key ? ' selected' : '') + '>' + metric.label +
+      (metric.key === 'rps' ? ' · req/s' : ' · ms') + '</option>';
+  }).join('');
+}
+function scenarioOptions(models, selected) {
+  return SCENARIOS.map(function(scenario) {
+    const exists = models.some(function(report) { return report.key === scenario.key; });
+    return '<option value="' + scenario.key + '"' + (selected === scenario.key ? ' selected' : '') +
+      (!exists ? ' disabled' : '') + '>' + esc(scenario.title) + (!exists ? ' · Chưa có dữ liệu' : '') + '</option>';
+  }).join('');
+}
+function comparisonItems(models, key) {
+  return SCENARIOS.filter(function(scenario) {
+    return models.some(function(report) { return report.key === scenario.key; });
+  }).map(function(scenario) {
+    const report = models.find(function(item) { return item.key === scenario.key; });
+    return {
+      label: scenario.short, color: scenario.color, value: metricValue(report, key),
+      description: scenario.title + ' · ' + number(report.vus) + ' VUs ghi nhận · ' + number(report.requests.count) + ' requests'
+    };
+  });
+}
+function comparisonMatrix(models, leftKey, rightKey, selectedMetric) {
+  const left = models.find(function(report) { return report.key === leftKey; });
+  const right = models.find(function(report) { return report.key === rightKey; });
+  if (!left || !right) return '<p class="empty-message">Cần hai báo cáo để so sánh.</p>';
+  const selectedLeft = metricValue(left, selectedMetric);
+  const selectedRight = metricValue(right, selectedMetric);
+  const delta = typeof selectedLeft === 'number' && selectedLeft !== 0 && typeof selectedRight === 'number'
+    ? (selectedRight - selectedLeft) / selectedLeft * 100 : undefined;
+  return '<div class="pair-summary"><span>Chênh lệch B so với A</span><strong>' +
+    (typeof delta === 'number' && delta > 0 ? '+' : '') + number(delta, 1) +
+    (typeof delta === 'number' ? '%' : '') + '</strong></div>' +
+    '<div class="table-wrap pair-table"><table><thead><tr><th>CHỈ SỐ</th><th class="numeric">A · ' + esc(left.title) +
+    '</th><th class="numeric">B · ' + esc(right.title) + '</th></tr></thead><tbody>' +
+    CHART_METRICS.map(function(metric) {
+      const unit = metric.key === 'rps' ? 'req/s' : 'ms';
+      return '<tr' + (metric.key === selectedMetric ? ' class="selected-metric"' : '') + '><td>' + metric.label +
+        ' <small>' + unit + '</small></td><td class="numeric">' + number(metricValue(left, metric.key), 2) +
+        '</td><td class="numeric">' + number(metricValue(right, metric.key), 2) + '</td></tr>';
+    }).join('') + '</tbody></table></div>';
+}
+function comparePanel(models) {
+  const left = models[0] && models[0].key;
+  const right = models[1] && models[1].key;
+  return '<section class="panel comparison-panel"><div class="panel-head"><div><h2>Hiệu năng giữa các kịch bản</h2>' +
+    '<p id="comparison-subtitle">Thời gian phản hồi P95 · đơn vị ms</p></div>' +
+    '<div class="segmented" role="group" aria-label="Chế độ so sánh">' +
+    '<button type="button" data-compare-mode="all" aria-pressed="true">Tất cả</button>' +
+    '<button type="button" data-compare-mode="pair" aria-pressed="false"' + (models.length < 2 ? ' disabled' : '') + '>So sánh 2 bài</button></div></div>' +
+    '<div class="panel-body"><div class="chart-controls"><label class="control-label">Chỉ số<select id="comparison-metric" aria-label="Chọn chỉ số so sánh">' + metricOptions('p95') + '</select></label>' +
+    '<div id="pair-controls" class="pair-controls" hidden><label class="control-label">Kịch bản A<select id="compare-a">' + scenarioOptions(models, left) +
+    '</select></label><span class="versus">vs</span><label class="control-label">Kịch bản B<select id="compare-b">' + scenarioOptions(models, right) +
+    '</select></label></div></div><div id="comparison-chart">' + chart(comparisonItems(models, 'p95'), 'ms', 'So sánh P95') +
+    '</div><div id="pair-matrix" hidden></div><p class="chart-note" id="comparison-note">' +
+    'Các bài có mức VU và thời gian nghỉ khác nhau. Đây là số liệu từng lần chạy độc lập.</p></div></section>';
+}
+function dashboardContent(models) {
+  const anyFailed = models.some(function(report) { return report.status === false; });
+  const unknown = !models.length || models.some(function(report) { return report.status === null; });
+  const status = anyFailed ? false : unknown ? null : true;
+  const total = models.reduce(function(sum, report) { return sum + (report.requests.count || 0); }, 0);
+  const errors = models.reduce(function(sum, report) { return sum + (report.errors.passes || 0); }, 0);
+  const p95Reports = models.filter(function(report) { return typeof report.latency['p(95)'] === 'number'; });
+  const rpsReports = models.filter(function(report) { return typeof report.requests.rate === 'number'; });
+  const maxP95 = p95Reports.slice().sort(function(a, b) { return b.latency['p(95)'] - a.latency['p(95)']; })[0];
+  const maxRps = rpsReports.slice().sort(function(a, b) { return b.requests.rate - a.requests.rate; })[0];
+  const rows = SCENARIOS.map(function(scenario, index) {
+    const report = models.find(function(item) { return item.key === scenario.key; });
+    return '<tr><td><a class="scenario-name" href="' + scenario.file + '-report.html"><span class="scenario-number">0' + (index + 1) +
+      '</span><span><strong>' + scenario.title + '</strong><small>' + scenario.description + '</small></span></a></td>' +
+      '<td class="numeric">' + (report ? number(report.vus) : '—') + '</td>' +
+      '<td class="numeric">' + (report ? number(report.durationMs / 1000, 1) + ' s' : '—') + '</td>' +
+      '<td class="numeric">' + (report ? number(report.requests.count) : '—') + '</td>' +
+      '<td class="numeric">' + (report ? number(report.requests.rate, 1) : '—') + '</td>' +
+      '<td class="numeric strong-number">' + (report ? duration(report.latency['p(95)']) : '—') + '</td>' +
+      '<td>' + badge(report ? report.status : null) + '</td><td><a class="row-link" href="' + scenario.file + '-report.html">Chi tiết ' + icon('arrow') + '</a></td></tr>';
+  }).join('');
+  return heading('Tổng quan hiệu năng', 'Đọc nhanh kết quả. So sánh tải. Đi sâu vào từng thao tác.', 'Performance / Overview') +
+    '<div class="status-strip"><div class="status-main">' + badge(status, status === null ? 'SLA N/A' : status ? 'SLA PASSED' : 'SLA FAILED') +
+    '<span>' + models.length + '/4 báo cáo có dữ liệu</span></div><span class="status-caption">Student Task Manager · REST API</span></div>' +
+    '<div class="metrics">' +
+    card('P95 cao nhất ghi nhận', number(maxP95 && maxP95.latency['p(95)'], 2), 'ms', maxP95 ? maxP95.title + ' · ' + number(maxP95.vus) + ' VUs' : 'Chưa có dữ liệu', 'clock') +
+    card('Throughput cao nhất', number(maxRps && maxRps.requests.rate, 1), 'req/s', maxRps ? maxRps.title + ' · lần chạy độc lập' : 'Chưa có dữ liệu', 'bolt') +
+    card('Tỷ lệ request lỗi', number(total ? errors / total * 100 : undefined, 2), '%', number(errors) + ' lỗi / ' + number(total) + ' requests', 'check', total ? errors ? 'metric-error' : 'metric-success' : '') +
+    card('Tổng request', number(total), '', 'Tổng từ ' + models.length + ' báo cáo hiện có', 'chart') + '</div>' +
+    '<div class="grid-two">' + comparePanel(models) + qualityPanel(models) + '</div>' +
+    '<section class="panel"><div class="panel-head"><div><h2>Khám phá các kịch bản</h2><p>Đi từ chỉ số tổng hợp đến từng functional check</p></div><span class="info-chip">04 scenarios</span></div>' +
+    '<div class="table-wrap"><table><thead><tr><th>KỊCH BẢN</th><th class="numeric">VUs</th><th class="numeric">THỜI GIAN</th><th class="numeric">REQUESTS</th>' +
+    '<th class="numeric">REQ / S</th><th class="numeric">P95</th><th>SLA</th><th aria-label="Xem báo cáo"></th></tr></thead><tbody>' + rows +
+    '</tbody></table></div><div class="panel-foot"><span>Chọn một kịch bản để xem báo cáo chi tiết.</span><span>' + models.length + ' báo cáo</span></div></section>' + guide(true);
+}
+function operationGroups(checks) {
+  const definitions = [
+    { key: 'health', label: 'Health', method: 'GET', description: 'Tình trạng sẵn sàng của API' },
+    { key: 'login', label: 'Login', method: 'POST', description: 'Xác thực và nhận access token' },
+    { key: 'read', label: 'Read', method: 'GET', description: 'Danh sách, bộ lọc và chi tiết nhiệm vụ' },
+    { key: 'create', label: 'Create', method: 'POST', description: 'Tạo nhiệm vụ mới' },
+    { key: 'update', label: 'Update', method: 'PUT', description: 'Cập nhật nhiệm vụ' },
+    { key: 'delete', label: 'Delete', method: 'DELETE', description: 'Xóa nhiệm vụ' },
+    { key: 'other', label: 'Khác', method: 'CHECK', description: 'Các kiểm tra bổ sung' }
+  ];
+  function classify(check) {
+    const text = (check.group + ' ' + check.name).toLowerCase();
+    if (/health|ping/.test(text)) return 'health';
+    if (/auth|login|dang nhap/.test(text)) return 'login';
+    if (/create|post.*task|tao task/.test(text)) return 'create';
+    if (/update|\bput\b|cap nhat/.test(text)) return 'update';
+    if (/delete|xoa task/.test(text)) return 'delete';
+    if (/read|retrieve|quer|filter|detail|\bget\b|danh sach|chi tiet|loc task/.test(text)) return 'read';
+    return 'other';
+  }
+  return definitions.map(function(definition, order) {
+    const items = checks.filter(function(check) { return classify(check) === definition.key; });
+    return {
+      key: definition.key, label: definition.label, method: definition.method, description: definition.description,
+      order: order, checks: items.slice().sort(function(a, b) { return Number(b.fails > 0) - Number(a.fails > 0); }),
+      failures: items.reduce(function(sum, check) { return sum + check.fails; }, 0),
+      passes: items.reduce(function(sum, check) { return sum + check.passes; }, 0)
+    };
+  }).filter(function(group) { return group.checks.length; }).sort(function(a, b) {
+    return Number(b.failures > 0) - Number(a.failures > 0) || a.order - b.order;
+  });
+}
+function groupedChecks(checks, totals) {
+  const groups = operationGroups(checks);
+  const failed = checks.filter(function(check) { return check.fails > 0; });
+  const firstFailed = groups.find(function(group) { return group.failures; });
+  const failureNotice = failed.length ? '<div class="failure-notice"><span class="failure-marker">!</span><div><strong>' +
+    failed.length + ' nội dung kiểm tra chưa đạt</strong><p>' + esc(failed[0].name) +
+    (failed.length > 1 ? ' và ' + (failed.length - 1) + ' nội dung khác.' : '.') +
+    '</p></div><a href="#operation-' + firstFailed.key + '">Xem lỗi ' + icon('arrow') + '</a></div>' : '';
+  const content = groups.map(function(group, index) {
+    const rows = group.checks.map(function(check) {
+      const total = check.passes + check.fails;
+      const rate = total ? check.passes / total * 100 : undefined;
+      const status = !total ? 'neutral' : check.fails ? 'fail' : 'pass';
+      return '<tr class="check-row' + (check.fails ? ' check-failed' : '') + '" data-status="' + status + '">' +
+        '<td class="check-name"><strong>' + esc(check.name) + '</strong><small>' + esc(check.group) + '</small>' +
+        (check.fails ? '<span class="failure-detail">' + number(check.fails) + ' / ' + number(total) + ' lần kiểm tra không đạt</span>' : '') + '</td>' +
+        '<td class="numeric">' + number(check.passes) + '</td><td class="numeric' + (check.fails ? ' failure-number' : '') + '">' + number(check.fails) +
+        '</td><td class="numeric">' + number(rate, 1) + (total ? '%' : '') +
+        '<span class="progress" aria-hidden="true"><span style="width:' + (rate || 0) + '%"></span></span></td><td>' + badge(!total ? null : !check.fails) + '</td></tr>';
+    }).join('');
+    return '<details class="check-group' + (group.failures ? ' has-failures' : '') + '" id="operation-' + group.key + '"' +
+      (group.failures || index === 0 ? ' open' : '') + '><summary><span class="group-chevron"></span><span class="method ' + group.method.toLowerCase() + '">' +
+      group.method + '</span><span class="group-title"><strong>' + group.label + '</strong><small>' + group.description + '</small></span>' +
+      '<span class="group-result">' + (group.failures ? badge(false, number(group.failures) + ' lỗi') : badge(group.passes ? true : null, group.passes ? 'Đạt' : 'N/A')) +
+      '<span class="group-count">' + group.checks.length + ' checks</span></span></summary>' +
+      '<div class="table-wrap"><table><caption class="sr-only">Functional checks: ' + group.label +
+      '</caption><thead><tr><th>NỘI DUNG KIỂM TRA</th><th class="numeric">ĐẠT</th><th class="numeric">KHÔNG ĐẠT</th><th class="numeric">TỶ LỆ</th><th>KẾT QUẢ</th></tr></thead><tbody>' +
+      rows + '</tbody></table></div></details>';
+  }).join('');
+  return '<section class="panel checks-panel" id="checks"><div class="panel-head check-heading"><div><p class="section-kicker">02 / FUNCTIONAL CHECKS</p>' +
+    '<h2>Chi tiết theo thao tác</h2><p>' + groups.length + ' nhóm thao tác · Nhóm có lỗi được đưa lên đầu</p></div><div class="check-toolbar">' +
+    '<label class="search-field">' + icon('search') + '<input type="search" id="check-search" placeholder="Tìm nội dung kiểm tra…" aria-label="Tìm functional check"></label>' +
+    '<select id="check-filter" aria-label="Lọc kết quả check"><option value="all">Tất cả</option><option value="pass">Đạt</option><option value="fail">Không đạt</option><option value="neutral">Chưa có dữ liệu</option></select>' +
+    '<button type="button" class="button" id="expand-checks">Mở tất cả</button></div></div>' + failureNotice +
+    '<div class="check-groups">' + content + '</div><p class="empty-message" id="checks-empty"' + (checks.length ? ' hidden' : '') +
+    '>Không có nội dung kiểm tra phù hợp.</p><div class="panel-foot"><span id="check-count" role="status" aria-live="polite">' +
+    checks.length + ' / ' + checks.length + ' nội dung</span><span>' + number(totals.passes) + ' checks đạt · ' + number(totals.fails) + ' checks lỗi</span></div></section>';
+}
+
+function initializeUI() {
+  const body = document.body;
+  const theme = document.getElementById('theme-toggle');
+  try { if (localStorage.getItem('stm-report-theme') === 'dark') body.classList.add('dark'); } catch (error) {}
+  function syncTheme() {
+    if (theme) theme.setAttribute('aria-pressed', String(body.classList.contains('dark')));
+  }
+  syncTheme();
+  if (theme) theme.addEventListener('click', function() {
+    body.classList.toggle('dark');
+    syncTheme();
+    try { localStorage.setItem('stm-report-theme', body.classList.contains('dark') ? 'dark' : 'light'); } catch (error) {}
+  });
+  const print = document.getElementById('print-report');
+  if (print) print.addEventListener('click', function() { window.print(); });
+
+  const search = document.getElementById('check-search');
+  const filter = document.getElementById('check-filter');
+  const expand = document.getElementById('expand-checks');
+  const groups = Array.from(document.querySelectorAll('.check-group'));
+  let savedExpanded = null;
+  function syncExpand() {
+    if (!expand) return;
+    const visible = groups.filter(function(group) { return !group.hidden; });
+    expand.disabled = visible.length === 0;
+    expand.textContent = visible.length && visible.every(function(group) { return group.open; }) ? 'Thu gọn' : 'Mở tất cả';
+  }
+  function filterChecks() {
+    const query = search.value.trim().toLocaleLowerCase('vi');
+    const mode = filter.value;
+    const active = Boolean(query || mode !== 'all');
+    if (active && !savedExpanded) savedExpanded = groups.map(function(group) { return group.open; });
+    let count = 0;
+    groups.forEach(function(group, index) {
+      let matching = 0;
+      const label = group.querySelector('.group-title').textContent;
+      group.querySelectorAll('.check-row').forEach(function(row) {
+        const match = (label + ' ' + row.textContent).toLocaleLowerCase('vi').indexOf(query) !== -1 &&
+          (mode === 'all' || row.dataset.status === mode);
+        row.hidden = !match;
+        if (match) { count++; matching++; }
+      });
+      group.hidden = matching === 0;
+      if (active && matching) group.open = true;
+      else if (!active && savedExpanded) group.open = savedExpanded[index];
+    });
+    if (!active) savedExpanded = null;
+    document.getElementById('check-count').textContent = count + ' / ' + document.querySelectorAll('.check-row').length + ' nội dung';
+    document.getElementById('checks-empty').hidden = count !== 0;
+    syncExpand();
+  }
+  if (search && filter) {
+    search.addEventListener('input', filterChecks);
+    filter.addEventListener('change', filterChecks);
+  }
+  groups.forEach(function(group) { group.addEventListener('toggle', syncExpand); });
+  if (expand) expand.addEventListener('click', function() {
+    const visible = groups.filter(function(group) { return !group.hidden; });
+    const open = !visible.every(function(group) { return group.open; });
+    visible.forEach(function(group) { group.open = open; });
+    syncExpand();
+  });
+  syncExpand();
+  const failureLink = document.querySelector('.failure-notice a');
+  if (failureLink) failureLink.addEventListener('click', function() {
+    const group = document.getElementById(failureLink.getAttribute('href').slice(1));
+    if (filter) { filter.value = 'all'; search.value = ''; filterChecks(); }
+    if (group) group.open = true;
+  });
+
+  const metric = document.getElementById('comparison-metric');
+  const modes = Array.from(document.querySelectorAll('[data-compare-mode]'));
+  let compareMode = 'all';
+  function updateComparison(changed) {
+    if (!metric || !window.renderComparison) return;
+    window.renderComparison(metric.value, compareMode, changed);
+  }
+  if (metric) metric.addEventListener('change', function() { updateComparison(); });
+  modes.forEach(function(button) {
+    button.addEventListener('click', function() {
+      compareMode = button.dataset.compareMode;
+      modes.forEach(function(item) { item.setAttribute('aria-pressed', String(item === button)); });
+      updateComparison();
+    });
+  });
+  ['a', 'b'].forEach(function(side) {
+    const select = document.getElementById('compare-' + side);
+    if (select) select.addEventListener('change', function() { updateComparison(side); });
+  });
+  const latencyTabs = Array.from(document.querySelectorAll('[data-latency-metric]'));
+  latencyTabs.forEach(function(button) {
+    button.addEventListener('click', function() {
+      latencyTabs.forEach(function(item) { item.setAttribute('aria-pressed', String(item === button)); });
+      if (window.renderLatency) window.renderLatency(button.dataset.latencyMetric);
+    });
+  });
+
+  // Expand native details and restore the user's filtering/collapse state after printing.
+  let printState = null;
+  window.addEventListener('beforeprint', function() {
+    const elements = Array.from(document.querySelectorAll('.check-group, .check-row'));
+    printState = elements.map(function(element) { return { element: element, hidden: element.hidden, open: element.open }; });
+    elements.forEach(function(element) {
+      element.hidden = false;
+      if (element.tagName === 'DETAILS') element.open = true;
+    });
+  });
+  window.addEventListener('afterprint', function() {
+    (printState || []).forEach(function(state) {
+      state.element.hidden = state.hidden;
+      if (state.element.tagName === 'DETAILS') state.element.open = state.open;
+    });
+    printState = null;
+    syncExpand();
+  });
+}
+function initializeComparison(models) {
+  window.renderComparison = function(key, mode, changed) {
+    const metric = CHART_METRICS.find(function(item) { return item.key === key; }) || CHART_METRICS[2];
+    const leftSelect = document.getElementById('compare-a');
+    const rightSelect = document.getElementById('compare-b');
+    const isPair = mode === 'pair' && models.length >= 2;
+    if (isPair && leftSelect.value === rightSelect.value) {
+      const other = models.find(function(report) { return report.key !== (changed === 'b' ? rightSelect.value : leftSelect.value); });
+      if (other) (changed === 'b' ? leftSelect : rightSelect).value = other.key;
+    }
+    const unit = key === 'rps' ? 'req/s' : 'ms';
+    let items = comparisonItems(models, key);
+    if (isPair) items = [leftSelect.value, rightSelect.value].map(function(reportKey, index) {
+      const report = models.find(function(item) { return item.key === reportKey; });
+      const scenario = SCENARIOS.find(function(item) { return item.key === reportKey; });
+      return {
+        label: (index ? 'B · ' : 'A · ') + scenario.short, color: scenario.color, value: metricValue(report, key),
+        description: scenario.title + ' · ' + number(report.vus) + ' VUs ghi nhận · ' + number(report.requests.count) + ' requests'
+      };
+    });
+    document.getElementById('pair-controls').hidden = !isPair;
+    document.getElementById('pair-matrix').hidden = !isPair;
+    document.getElementById('pair-matrix').innerHTML = isPair ? comparisonMatrix(models, leftSelect.value, rightSelect.value, key) : '';
+    document.getElementById('comparison-chart').innerHTML = items.length ? chart(items, unit, 'So sánh ' + metric.label) : '<p class="empty-message">Chưa có dữ liệu kiểm thử.</p>';
+    document.getElementById('comparison-subtitle').textContent = metric.label + ' · ' + metric.description;
+    document.getElementById('comparison-note').textContent = 'Các bài có mức VU và thời gian nghỉ khác nhau. Chênh lệch là số liệu quan sát, không phải đánh giá ở tải tương đương.';
+  };
+}
+function latencyItems(report, selected) {
+  return CHART_METRICS.filter(function(metric) { return metric.key !== 'rps'; }).map(function(metric) {
+    return {
+      label: metric.label, value: metricValue(report, metric.key), selected: metric.key === selected,
+      color: metric.key === selected ? '#ed744a' : '#7194a5', description: metric.description
+    };
+  });
+}
+function initializeLatency(report) {
+  window.renderLatency = function(key) {
+    const metric = CHART_METRICS.find(function(item) { return item.key === key; }) || CHART_METRICS[2];
+    document.getElementById('latency-chart').innerHTML = chart(latencyItems(report, key), 'ms', 'Thời gian phản hồi ' + metric.label);
+    document.getElementById('latency-focus').innerHTML = '<strong>' + metric.label + ' ' + duration(metricValue(report, key)) + '</strong><span>' + esc(metric.description) + '</span>';
+    document.querySelectorAll('[data-latency-stat]').forEach(function(element) {
+      element.classList.toggle('selected', element.dataset.latencyStat === key);
+    });
+  };
+}
+
+export function generateDashboard() {
+  const dependencies = [
+    esc, number, duration, icon, badge, card, chart, metricValue, metricOptions, scenarioOptions,
+    comparisonItems, comparisonMatrix, comparePanel, qualityPanel, heading, guide, dashboardContent, initializeComparison
+  ].map(function(fn) { return fn.toString(); }).join('\n');
+  const scripts = SCENARIOS.map(function(scenario) { return '<script src="' + scenario.file + '-data.js"></script>'; }).join('') +
+    '<script>var SCENARIOS=' + scriptJSON(SCENARIOS) + ';var CHART_METRICS=' + scriptJSON(CHART_METRICS) + ';' + dependencies +
+    '\nvar models=SCENARIOS.map(function(scenario){return (window.STM_REPORTS||{})[scenario.key];}).filter(Boolean);' +
+    'document.getElementById("dashboard-content").innerHTML=dashboardContent(models);initializeComparison(models);</script>';
+  return shell('Tổng quan hiệu năng', '', '<div id="dashboard-content">' + dashboardContent([]) +
+    '</div><noscript><p class="empty-message">Bật JavaScript để xem tổng quan. Các báo cáo chi tiết vẫn hoạt động.</p></noscript>', scripts);
+}
+export function generateHtmlReport(data, options = {}) {
+  const report = model(data, options);
+  const scenario = SCENARIOS.find(function(item) { return item.key === report.key; });
+  const timestamp = report.generatedAt === 'saved' ? 'Dữ liệu kiểm thử đã lưu' :
+    new Date(report.generatedAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+  const passed = report.thresholds.filter(function(threshold) { return threshold.passed; }).length;
+  const thresholdRows = report.thresholds.map(function(threshold) {
+    return '<tr><td>' + esc(threshold.metric) + '</td><td class="threshold-expression">' + esc(threshold.expression) +
+      '</td><td>' + badge(threshold.passed) + '</td></tr>';
+  }).join('');
+  const statItems = [
+    { label: 'Avg', field: 'avg', key: 'avg' }, { label: 'Median', field: 'med', key: 'median' },
+    { label: 'P90', field: 'p(90)', key: 'p90' }, { label: 'P95', field: 'p(95)', key: 'p95' },
+    { label: 'P99', field: 'p(99)', key: 'p99' }, { label: 'Max', field: 'max', key: 'max' }
+  ];
+  const tabs = CHART_METRICS.filter(function(metric) { return metric.key !== 'rps'; }).map(function(metric) {
+    return '<button type="button" data-latency-metric="' + metric.key + '" aria-pressed="' +
+      (metric.key === 'p95') + '">' + metric.label + '</button>';
+  }).join('');
+  const content = heading(report.title, scenario ? scenario.description : report.scenarioType, 'Performance / Scenario report',
+    esc(timestamp) + '<strong>' + esc(report.targetUrl) + '</strong>') +
+    '<div class="status-strip"><div class="status-main">' + badge(report.status, report.status === null ? 'SLA N/A' : report.status ? 'SLA PASSED' : 'SLA FAILED') +
+    '<span>' + passed + '/' + report.thresholds.length + ' tiêu chí đạt</span></div>' +
+    '<a class="row-link" href="#checks">Functional checks ' + icon('arrow') + '</a></div>' +
+    '<div class="metrics">' +
+    card('Thời gian phản hồi P95', number(report.latency['p(95)'], 2), 'ms', '95% request không vượt quá mức này', 'clock') +
+    card('Throughput trung bình', number(report.requests.rate, 1), 'req/s', 'Trên toàn bộ thời gian chạy', 'bolt') +
+    card('Tỷ lệ request lỗi', number(typeof report.errors.rate === 'number' ? report.errors.rate * 100 : undefined, 2),
+      '%', number(report.errors.passes) + ' request thất bại', 'check', report.errors.rate > 0 ? 'metric-error' : report.errors.rate === 0 ? 'metric-success' : '') +
+    card('Tổng request', number(report.requests.count), '', number(report.iterations.count) + ' iterations hoàn thành', 'chart') + '</div>' +
+    '<div class="grid-two"><section class="panel"><div class="panel-head"><div><h2>Phân tích thời gian phản hồi</h2>' +
+    '<p>Chọn chỉ số để làm nổi bật · Di chuột hoặc focus vào thanh để xem chi tiết</p></div>' +
+    '<div class="segmented latency-tabs" role="group" aria-label="Chỉ số thời gian phản hồi">' + tabs + '</div></div><div class="panel-body">' +
+    '<div class="latency-focus" id="latency-focus"><strong>P95 ' + duration(report.latency['p(95)']) + '</strong><span>' +
+    esc(CHART_METRICS[2].description) + '</span></div><div id="latency-chart">' +
+    chart(latencyItems(report, 'p95'), 'ms', 'Thời gian phản hồi') + '</div><div class="latency-grid">' +
+    statItems.map(function(stat) {
+      return '<div class="latency-stat' + (stat.key === 'p95' ? ' selected' : '') + '" data-latency-stat="' + stat.key +
+        '"><span>' + stat.label + '</span><strong>' + duration(report.latency[stat.field]) + '</strong></div>';
+    }).join('') + '</div><p class="chart-note">Min: ' + duration(report.latency.min) +
+    ' · N/A là chỉ số chưa được xuất trong summary.</p></div></section>' +
+    '<aside class="panel run-panel"><div class="panel-head"><div><p class="section-kicker">RUN CONTEXT</p><h2>Thông tin lần chạy</h2></div>' +
+    icon('chart') + '</div><div class="panel-body"><div class="mini-details">' +
+    '<div><span>Đích kiểm thử</span><strong>' + esc(report.targetUrl) + '</strong></div>' +
+    '<div><span>Thời gian thực thi</span><strong>' + number(typeof report.durationMs === 'number' ? report.durationMs / 1000 : undefined, 2) + ' s</strong></div>' +
+    '<div><span>VUs ghi nhận / cấp phát</span><strong>' + number(report.vus) + ' / ' + number(report.allocatedVus) + '</strong></div>' +
+    '<div><span>Dữ liệu nhận</span><strong>' + bytes(report.received.count) + '</strong></div>' +
+    '<div><span>Dữ liệu gửi</span><strong>' + bytes(report.sent.count) + '</strong></div></div></div></aside></div>' +
+    '<section class="panel section-gap" id="thresholds"><div class="panel-head"><div><p class="section-kicker">01 / SERVICE LEVEL</p>' +
+    '<h2>Ngưỡng đánh giá SLA</h2><p>Kết quả do k6 đánh giá theo cấu hình của kịch bản</p></div><span class="info-chip">' +
+    report.thresholds.length + ' tiêu chí</span></div><div class="table-wrap"><table><thead><tr><th>CHỈ SỐ</th><th>ĐIỀU KIỆN</th><th>KẾT QUẢ</th></tr></thead><tbody>' +
+    (thresholdRows || '<tr><td colspan="3">Chưa có ngưỡng đánh giá.</td></tr>') + '</tbody></table></div></section>' +
+    groupedChecks(report.checks, report.checkTotals) + guide(false);
+  const dependencies = [esc, number, duration, chart, metricValue, latencyItems, initializeLatency].map(function(fn) { return fn.toString(); }).join('\n');
+  const script = '<script>var CHART_METRICS=' + scriptJSON(CHART_METRICS) + ';' + dependencies +
+    '\ninitializeLatency(' + scriptJSON(report) + ');</script>';
+  return shell(report.title, report.key, content, script, report.targetUrl);
+}

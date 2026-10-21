@@ -260,6 +260,14 @@ PASS/FAIL tong the phan anh thresholds do k6 danh gia. Functional checks duoc th
 
 ---
 
+### Cap nhat giao dien phan tich
+
+- Bo cuc gon hon, uu tien P95 / throughput / error rate; mau canh bao thay doi theo ty le loi.
+- Bieu do co truc do, tooltip khi di chuot hoac focus bang ban phim; chon Avg, P90, P95, Max va RPS.
+- Che do so sanh hai kich ban co bang doi chieu va chenh lech B so voi A. Muc tai va thoi gian nghi khac nhau nen khong xem chenh lech la danh gia o tai tuong duong.
+- Functional checks duoc nhom theo Health / Login / Read / Create / Update / Delete. Nhom va dong co loi duoc dua len dau, co the mo / thu gon tung nhom hoac tat ca.
+- Tim kiem va loc tu dong mo nhom phu hop; khi in, mo toan bo checks va khoi phuc trang thai xem sau khi in.
+
 ## 8. Huong dan dua du an len GitHub repository rieng
 
 De dua du an nay len repository GitHub ca nhan, thuc hien cac lenh sau tu thu muc goc cua du an:
