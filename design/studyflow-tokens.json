@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "source": "DuANE2E@36629698fd2d4aa1945ca11fe07cf27ac2c635a4",
+  "colors": {
+    "primary": "#7662cf",
+    "primaryHover": "#6450bb",
+    "navy": "#191d33",
+    "background": "#f7f8fc",
+    "surface": "#ffffff",
+    "soft": "#f0ecfc",
+    "ink": "#2b2d43",
+    "muted": "#78788d",
+    "line": "#e9e8f0"
+  },
+  "radius": {
+    "panel": 12,
+    "button": 9,
+    "input": 8
+  },
+  "font": "Segoe UI, system sans-serif"
+}
