@@ -315,3 +315,8 @@ git push -u origin main
 - Chu de: Performance Testing voi Grafana k6
 - He thong kiem thu: Student Task Manager REST API
 - Tieu chuan trinh bay: Khong su dung icon/emoji trang tri, tap trung vao so lieu ky thuat thuc te, ro rang, de bao ve truoc giang vien.
+
+
+## StudyFlow shared interface
+
+The login and workspace now use the common StudyFlow design across all seven projects. See [STUDYFLOW_SYNC.md](STUDYFLOW_SYNC.md) for the palette, preserved testing behavior, run instructions and verification limits.

@@ -1,0 +1,37 @@
+/* REST applications: presentation adapter only; native API/auth/CRUD stay active. */
+.app-shell { display: block; }
+.sidebar.sf-sidebar { position: fixed; width: 223px; inset: 0 auto 0 0; height: 100vh; overflow-y: auto; padding: 32px 22px 22px; }
+.workspace { margin: 0 0 0 223px; width: calc(100% - 223px); max-width: none; padding: 0 35px; min-height: 100vh; }
+.workspace>.topbar { margin-left: -35px; margin-right: -35px; padding: 0 35px; min-height: 78px; border-bottom: 1px solid var(--sf-line); }
+.page-heading { padding-top: 32px; }
+.page-heading h1 { font-size: 30px; font-weight: 650; letter-spacing: -1px; }
+.workspace .welcome-banner { background: var(--sf-soft); color: var(--sf-ink); border: 1px solid var(--sf-line); border-radius: 12px; }
+.workspace .welcome-banner :is(h2,p,.banner-kicker) { color: var(--sf-ink); }
+.workspace .welcome-banner .banner-button { background: var(--sf-primary); color: #fff; border: 0; border-radius: 9px; }
+.workspace .welcome-banner .banner-orbit { opacity: .3; }
+.sf-sidebar .workspace-label { margin-top: 0; }.sf-sidebar .workspace-label:has(+ #course-shortcuts) { margin-top: 22px; }
+.sf-sidebar .sidebar-note { margin: auto 0 0; padding: 20px 15px; }.sf-sidebar .sidebar-note .small-label { font-size: 8px; }
+.sf-sidebar .sidebar-note p { font-size: 12px; }.sf-sidebar .sidebar-bottom { padding-top: 15px; margin-top: 16px; }
+.sf-sidebar .user-card { border-top-color: #303550; color: #d5d6e4; }.sf-sidebar .user-card small { color: #a9aec9; }
+.stat-card { padding: 19px 21px 18px; border-radius: 12px; }.stat-card>strong { font-size: 34px; font-weight: 650; letter-spacing: -1px; }.stat-card.completed-stat { background: var(--sf-surface); }
+.stat-card>span { color: var(--sf-muted); font-size: 12px; }.stat-card>small { color: var(--sf-muted); font-size: 10px; }
+.focus-panel { background: var(--sf-soft); }.panel .panel-heading h2 { font-size: 17px; }
+.task-name { font-weight: 600; }.task-row { border-color: var(--sf-line); }.task-row .task-description { color: var(--sf-muted); }
+.theme-switch { z-index: 40; right: 16px; top: 20px; background: var(--sf-surface); color: var(--sf-muted); border-color: var(--sf-line); }
+.workspace>.topbar { padding-right: 64px; }
+@media(max-width:1190px) and (min-width:701px) { .sidebar.sf-sidebar { width: 200px; padding: 28px 16px 20px; }.sf-sidebar .sf-brand { font-size: 20px; }.workspace { margin-left: 200px; width: calc(100% - 200px); padding-left: 24px; padding-right: 24px; }.workspace>.topbar { margin-left: -24px; margin-right: -24px; padding-left: 24px; } }
+@media(max-width:700px) {
+  .sidebar.sf-sidebar { position: relative; width: 100%; height: auto; padding: 18px 18px 10px; overflow: visible; }
+  .workspace { margin-left: 0; width: 100%; padding: 0 18px; }
+  .workspace>.topbar { margin-left: -18px; margin-right: -18px; padding: 0 18px; min-height: 55px; }
+  .page-heading { padding-top: 24px; }.page-heading h1 { font-size: 27px; }
+  .sf-sidebar :is(.workspace-label,.sidebar-note,#course-shortcuts) { display: none; }
+  .sf-sidebar nav { display: flex; flex-direction: row; flex-wrap: wrap; gap: 5px; }
+  .sf-sidebar nav a { flex: 1; justify-content: center; padding: 10px 7px; font-size: 10px; gap: 5px; white-space: nowrap; }
+  .sf-sidebar .sidebar-bottom { padding: 0; margin: 12px 0 0; display: flex; align-items: center; gap: 12px; }
+  .sf-sidebar .user-card { padding: 5px 0; border: 0; flex: 1; }.sf-sidebar .user-card small { display: none; }.sf-sidebar .avatar { width: 26px; height: 26px; }
+  .sf-sidebar .logout { margin: 0; width: auto; padding: 8px 10px; font-size: 10px; }
+  .theme-switch { top: 18px; right: 18px; }.sf-login~.theme-switch { top: 18px; }
+  .stat-card { padding: 16px; }.stat-card>strong { font-size: 30px; }
+}
+@media(max-width:390px) { .sidebar.sf-sidebar { padding-left: 10px; padding-right: 10px; }.sf-sidebar nav a>span { display: none; }.workspace { padding-left: 12px; padding-right: 12px; }.workspace>.topbar { margin-left: -12px; margin-right: -12px; padding-left: 12px; }.stat-card>small { font-size: 9px; } }
