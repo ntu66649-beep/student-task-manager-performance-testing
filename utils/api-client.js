@@ -48,6 +48,8 @@ export function getTasks(token, queryParams = {}) {
   const queryStringParts = [];
   if (queryParams.status) queryStringParts.push(`status=${encodeURIComponent(queryParams.status)}`);
   if (queryParams.course) queryStringParts.push(`course=${encodeURIComponent(queryParams.course)}`);
+  if (queryParams.page !== undefined) queryStringParts.push(`page=${encodeURIComponent(queryParams.page)}`);
+  if (queryParams.limit !== undefined) queryStringParts.push(`limit=${encodeURIComponent(queryParams.limit)}`);
   if (queryStringParts.length > 0) {
     url += `?${queryStringParts.join('&')}`;
   }

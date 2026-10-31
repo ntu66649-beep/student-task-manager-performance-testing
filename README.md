@@ -38,6 +38,8 @@ student-task-manager-performance-testing/
 │   ├── 02_load_test.js            Kich ban 2: Load Testing (10 VUs)
 │   ├── 03_stress_test.js          Kich ban 3: Stress Testing (20 VUs)
 │   └── full_flow_test.js          Kich ban bo sung: Full Flow CRUD Test (10 VUs)
+│   ├── 04_pagination_test.js      Kich ban bo sung: tham do phan trang page/limit
+│   └── 05_invalid_login_test.js   Kich ban bo sung: tu choi thong tin dang nhap sai
 │
 ├── utils/
 │   ├── api-client.js              Module goi REST API chuan hoa cho k6
@@ -135,6 +137,16 @@ Trong kiem thu hieu nang voi k6, cac thuat ngu ky thuat duoc ap dung nhu sau:
 - Thoi gian chay: 25 giay.
 - Muc tieu: Kiem tra hieu nang va tinh toan ven du lieu khi mo phong tron ven 100% cac phuong thuc HTTP: GET (danh sach, chi tiet, filter), POST (login, tao task), PUT (cap nhat task), DELETE (xoa task).
 
+### Kich ban 5: Pagination Probe (Tham do phan trang)
+- File thuc thi: `scripts/04_pagination_test.js` (5 VUs, 20 giay).
+- Gui `GET /api/tasks?page=1&limit=10` va `page=2&limit=10`; kiem tra HTTP 200, dinh dang mang `data`, va gioi han 10 ban ghi neu API da phan trang.
+- Du an hien tai ghi nhan API co the chua ho tro phan trang. Kich ban nay tham do kha nang tuong thich va luu check/bang do; no khong khang dinh rang page 1 va page 2 co du lieu rieng biet. Neu API chua ho tro, can bo sung phan trang o backend va metadata truoc khi dung de xac nhan tinh dung dan day du.
+
+### Kich ban 6: Invalid Login (Dang nhap sai)
+- File thuc thi: `scripts/05_invalid_login_test.js` (5 VUs, 20 giay).
+- Dung mat khau sai va xac nhan API tra ve HTTP 4xx, khong cap access token.
+- Phan hoi 4xx la ket qua mong doi cho kich ban nay va duoc loai khoi `http_req_failed`; cac functional checks van bao FAIL neu server chap nhan dang nhap sai hoac tra token.
+
 ---
 
 ## 5. Bang tong hop ket qua kiem thu thuc te
@@ -211,6 +223,8 @@ npm run test:smoke
 npm run test:load
 npm run test:stress
 npm run test:full
+npm run test:pagination
+npm run test:invalid-login
 ```
 
 ### Buoc 3: Xem bao cao hieu nang truc quan

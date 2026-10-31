@@ -8,6 +8,8 @@
     "test:load": ".\\bin\\k6.exe run scripts/02_load_test.js",
     "test:stress": ".\\bin\\k6.exe run scripts/03_stress_test.js",
     "test:full": ".\\bin\\k6.exe run scripts/full_flow_test.js",
+    "test:pagination": ".\\bin\\k6.exe run scripts/04_pagination_test.js",
+    "test:invalid-login": ".\\bin\\k6.exe run scripts/05_invalid_login_test.js",
     "report:smoke": "powershell -Command Start-Process reports/smoke-test-report.html",
     "report:load": "powershell -Command Start-Process reports/load-test-report.html",
     "report:stress": "powershell -Command Start-Process reports/stress-test-report.html",
